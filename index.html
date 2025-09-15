@@ -600,8 +600,9 @@ const TARGETS = { P:0.20, F:0.50, C:0.30 };
 const TOLERANCE_KCAL = 100;
 const TOL_PCT_PT = 3;
 
-// ogranicznik oliwy w autokorekcie
-const MAX_OIL_CORR_G = 5; // max ~135 kcal z oliwy na dzień
+// --- Limity oliwy ---
+const OIL_CAP = { perMeal: 5, perDay: 10 }; // max 5 g/posiłek i 10 g/dzień (z menu + korekt)
+const MAX_OIL_CORR_G = 3;                    // „szlif” oliwą z autokorekty max 3 g
 
 function gramsForMacroFromFood(foodKey, macro, targetDeltaKcal){
   const nd = NUTRI[foodKey]; if(!nd) return 0;
@@ -684,15 +685,7 @@ function updateKcalStatus(card, dayK){
   }
 }
 // Główna funkcja – przeleci po wszystkich dniach i doda korektę
-function autoTopUpAllDays(){
-  Object.values(PLAN).forEach(week=>{
-    week.days.forEach(d=>{
-      if(d.shopping) return;
-      _removeOilCorrection(d.meals);
-      _addOilToReachTarget(d.meals);
-    });
-  });
-}
+// (stara, błędna implementacja usunięta; poprawna wersja znajduje się poniżej)
 // znacznik korekt
 function _removeAutoCorrections(dayMeals){
   ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
@@ -719,6 +712,32 @@ function _calcDayMacros(dayMeals){
     });
   });
   return {P,F,C};
+}
+// sumuje oliwę użyta w danym dniu
+function _oilUsedInDay(dayMeals){
+  let g=0;
+  ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
+    (dayMeals[sec]||[]).forEach(it=>{ if(it.k==='oliwa') g += (it.g||0); });
+  });
+  return g;
+}
+// przycina oliwę w istniejącym menu: max 5 g/posiłek i max 10 g/dzień
+function _capOliveOil(dayMeals){
+  let left = OIL_CAP.perDay;
+  ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
+    (dayMeals[sec]||[]).forEach(it=>{
+      if(it.k!=='oliwa') return;
+      const allow = Math.min(OIL_CAP.perMeal, left);
+      it.g = Math.max(0, Math.min(it.g||0, allow));
+      left -= it.g;
+    });
+    dayMeals[sec] = (dayMeals[sec]||[]).filter(x=> (x.k!=='oliwa') || x.g>0);
+  });
+}
+// ile oliwy można jeszcze dodać, żeby nie złamać limitów
+function _oilAllowanceLeft(dayMeals){
+  const used = _oilUsedInDay(dayMeals);
+  return Math.max(0, Math.min(OIL_CAP.perDay - used, OIL_CAP.perMeal));
 }
 // preferencje dobiegania makro – priorytet: stałe produkty, różnorodność
 const TOPUP_PREF = {
@@ -754,7 +773,7 @@ function _pushCorrection(dayMeals, sec, k, g, label){
 
 function _smartTopUpDay(dayMeals){
   _removeAutoCorrections(dayMeals);
-
+  _capOliveOil(dayMeals);   // <<< przytnij oliwę z menu bazowego
   // 1) policz aktualne kcal i makra
   const curK = _calcDayKcal(dayMeals);
   let needK = Math.max(0, TARGET_KCAL - curK);
@@ -800,9 +819,12 @@ function _smartTopUpDay(dayMeals){
     needK -= add('drugie','maslo_orzechowe',20,'Korekta: masło orzechowe');
   }
 
-  // 6) Szlif oliwą (max 5 g)
+  // 6) Szlif oliwą – tylko gdy trzeba i tylko w granicach
   if(needK > 0){
-    needK -= add('kolacja','oliwa',Math.min(5,Math.round(needK/9)),'Szlif: oliwa');
+    const canAdd = _oilAllowanceLeft(dayMeals);              // ile jeszcze wolno
+    const want   = Math.round(needK / 9);                    // teoretycznie potrzebne g
+    const gOil   = Math.max(0, Math.min(MAX_OIL_CORR_G, canAdd, want));
+    if(gOil>0){ _pushCorrection(dayMeals, 'kolacja', 'oliwa', gOil, 'Szlif: oliwa'); }
   }
 }
 
@@ -814,16 +836,17 @@ function autoTopUpAllDays(){
     });
   });
 }
-/* ============ RENDER TYGODNI ============ */
+
 function renderWeeks(){
   const tabsEl = document.getElementById('weekTabs');
   const weeksRoot = document.getElementById('weeksRoot');
+  if(!tabsEl || !weeksRoot) return;
   tabsEl.innerHTML = '';
   weeksRoot.innerHTML = '';
 
-  Object.keys(PLAN).forEach((wk,i)=>{
+  Object.keys(PLAN).forEach((wk, i)=>{
     const tab = document.createElement('div');
-    tab.className='tab'+(i===0?' active':'');
+    tab.className = 'tab' + (i===0 ? ' active' : '');
     tab.dataset.week = wk;
     tab.setAttribute('role','button');
     tab.setAttribute('tabindex','0');
@@ -831,15 +854,15 @@ function renderWeeks(){
     tabsEl.appendChild(tab);
 
     const panel = document.createElement('div');
-    panel.className='panel'+(i===0?' active':'');
+    panel.className = 'panel' + (i===0 ? ' active' : '');
     panel.dataset.week = wk;
 
     // Subtabs
     const subt = document.createElement('div');
-    subt.className='subtabs';
+    subt.className = 'subtabs';
     PLAN[wk].days.forEach((d,j)=>{
       const st = document.createElement('div');
-      st.className='subtab'+(j===0?' active':'');
+      st.className = 'subtab' + (j===0 ? ' active' : '');
       st.dataset.day = d.day;
       st.setAttribute('role','button'); st.setAttribute('tabindex','0');
       st.textContent = d.shopping ? '🛒 Zakupy' : d.day;
@@ -847,12 +870,14 @@ function renderWeeks(){
     });
     panel.appendChild(subt);
 
-    // Day cards
+    // Day cards (append all generated nodes)
     PLAN[wk].days.forEach((d,j)=>{
       const html = renderDayTable(d, wk, j);
       const wrap = document.createElement('div');
       wrap.innerHTML = html;
-      panel.appendChild(wrap.firstElementChild);
+      while(wrap.firstChild){
+        panel.appendChild(wrap.firstChild);
+      }
     });
 
     weeksRoot.appendChild(panel);
@@ -866,7 +891,8 @@ function activateTabs(){
       document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
       document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
       tab.classList.add('active');
-      document.querySelector('.panel[data-week="' + tab.dataset.week + '"]').classList.add('active');
+      const panel = document.querySelector('.panel[data-week="' + tab.dataset.week + '"]');
+      if(panel) panel.classList.add('active');
       syncPrintContext();
       drawAllCharts();
     });
@@ -1203,38 +1229,38 @@ function renderInlineWeekShopping(){
   });
 }
 
-// lokalny przycisk druku tylko listy zakupów tego tygodnia
-// (usunięty / przeniesiony) — nie ma już bloków poza funkcją renderInlineWeekShopping
 /* ============ DRUK ============ */
 function syncPrintContext(){
   document.body.classList.remove('print-mode-day','print-mode-week','print-mode-shopping');
 }
 function setupPrintButtons(){
-  document.getElementById('autoKcal').addEventListener('click', ()=>{
-  autoTopUpAllDays();
-  renderAll(); // przerysuj cały widok z nowymi gramaturami
-});
+  const autoBtn = document.getElementById('autoKcal');
+  if(autoBtn) autoBtn.addEventListener('click', ()=>{
+    autoTopUpAllDays();
+    renderAll(); // przerysuj cały widok z nowymi gramaturami
+  });
+
   const pDay  = document.getElementById('pDay');
   const pWeek = document.getElementById('pWeek');
   const pShop = document.getElementById('pShop');
   const pAll  = document.getElementById('pAll');
 
-  pDay.addEventListener('click', ()=>{
+  if(pDay) pDay.addEventListener('click', ()=>{
     document.body.classList.add('print-mode-day');
     window.print();
     document.body.classList.remove('print-mode-day');
   });
-  pWeek.addEventListener('click', ()=>{
+  if(pWeek) pWeek.addEventListener('click', ()=>{
     document.body.classList.add('print-mode-week');
     window.print();
     document.body.classList.remove('print-mode-week');
   });
-  pShop.addEventListener('click', ()=>{
+  if(pShop) pShop.addEventListener('click', ()=>{
     document.body.classList.add('print-mode-shopping');
     window.print();
     document.body.classList.remove('print-mode-shopping');
   });
-  pAll.addEventListener('click', ()=>{
+  if(pAll) pAll.addEventListener('click', ()=>{
     syncPrintContext(); window.print();
   });
 }
@@ -1255,7 +1281,8 @@ function _toggleDark(){
 
 /* ============ RENDER CAŁOŚCI ============ */
 function renderAll(){
-  renderWeeks();
+  // renderWeeks is defined earlier in the file
+  if(typeof renderWeeks === 'function') renderWeeks();
   activateTabs();
   applyMealFilter();
   // przelicz sumy, narysuj wykresy, podłącz checklistę i widoki zakupów, oraz mobilne udogodnienia
@@ -1264,29 +1291,31 @@ function renderAll(){
   wireChecklist();
   renderShoppingBar();
   renderInlineWeekShopping();
-  _wireScrollShadows();
+  _toggleScrollShadows();
   _centerActiveSubtab();
 }
 
 /* ============ INIT ============ */
 document.addEventListener('DOMContentLoaded', ()=>{
   // Schowaj cennik na małych ekranach
-if (window.matchMedia('(max-width: 560px)').matches) {
-  document.getElementById('priceDetails')?.removeAttribute('open');
-}
+  if (window.matchMedia('(max-width: 560px)').matches) {
+    document.getElementById('priceDetails')?.removeAttribute('open');
+  }
   // załaduj ceny do tabeli (z localStorage)
   const saved = loadPrices();
   // jeżeli coś się różni – nadpisz widok
   document.querySelectorAll('#priceTable tbody tr').forEach(tr=>{
     const key = tr.getAttribute('data-key');
     const td = tr.querySelector('.pval');
-    if(key in saved) td.textContent = String(saved[key]);
+    if(key in saved && td) td.textContent = String(saved[key]);
   });
 
   renderAll();
   setupPrintButtons();
-  document.getElementById('mealFilter').addEventListener('change', applyMealFilter);
-  autoTopUpAllDaysSmart();  
+  const mf = document.getElementById('mealFilter');
+  if(mf) mf.addEventListener('change', applyMealFilter);
+  // use existing autoTopUpAllDays (if present)
+  if(typeof autoTopUpAllDays === 'function') autoTopUpAllDays();
 });
 // ======= Mobilne udogodnienia =======
 function _toggleScrollShadows(){
@@ -1296,14 +1325,21 @@ function _toggleScrollShadows(){
     el.classList.toggle('show-right', el.scrollLeft<max);
   });
 }
-function _wireScrollShadows(){
-  document.querySelectorAll('.scroll').forEach(el=>{
-    el.addEventListener('scroll', _toggleScrollShadows, {passive:true});
-  });
-  window.addEventListener('resize', _toggleScrollShadows);
-  _toggleScrollShadows();
-}
+window.addEventListener('resize', _toggleScrollShadows);
+_toggleScrollShadows();
 
+// aktywne „dni” przewijają się w obrębie paska subtabs
+function _centerActiveSubtab(){
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const bar = panel.querySelector('.subtabs');
+    const active = panel.querySelector('.subtab.active');
+    if(!bar || !active) return;
+    const aRect = active.getBoundingClientRect();
+    const bRect = bar.getBoundingClientRect();
+    const delta = (aRect.left + aRect.width/2) - (bRect.left + bRect.width/2);
+    bar.scrollBy({left: delta, behavior:'smooth'});
+  });
+}
 // aktywne „dni” przewijają się w obrębie paska subtabs
 function _centerActiveSubtab(){
   document.querySelectorAll('.panel').forEach(panel=>{
