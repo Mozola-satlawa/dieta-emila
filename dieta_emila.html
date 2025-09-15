@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadłospis dla Emila – 4 tygodnie (makra %, nawigacja, zakupy)</title>
+<style>
+:root{--hdr:#1F4E78;--bg:#F8FAFC;--txt:#0F172A;--card:#FFFFFF;--br:#E5E7EB;
+--s1:#FFF2CC;--s2:#D6EFD8;--s3:#DDEBF7;--s4:#FCE4D6;--s5:#E7E6E6;--sum:#C6EFCE;--accent:#3b82f6}
+:root.dark{--hdr:#0B2447;--bg:#0B1220;--txt:#E5E7EB;--card:#0F172A;--br:#334155;
+--s1:#33461a;--s2:#1d3b2a;--s3:#182e4a;--s4:#3a2d1a;--s5:#333;--sum:#164;--accent:#60a5fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.45 system-ui,Segoe UI,Roboto,Arial}
+.header{background:var(--hdr);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;position:sticky;top:0;z-index:10}
+h1{margin:0;font-size:18px}.sub{opacity:.9;font-size:12px}.controls{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--br);background:#fff;color:#0b3b8a;border-radius:10px;padding:6px 10px;font-weight:700;cursor:pointer}
+:root.dark .btn{background:#0f172a;color:#93c5fd}.container{max-width:1200px;margin:16px auto;padding:0 10px}
+.tabs,.subtabs{display:flex;gap:6px;flex-wrap:wrap}.tab,.subtab{padding:8px 12px;border-radius:999px;border:1px solid var(--br);background:#fff;color:#0b3b8a;font-weight:700;cursor:pointer}
+:root.dark .tab,:root.dark .subtab{background:#0f172a;color:#93c5fd}.tab.active,.subtab.active{background:#eef2ff}
+:root.dark .tab.active,:root.dark .subtab.active{background:#1e293b}.panel{display:none}.panel.active{display:block}
+.card{background:var(--card);border:1px solid var(--br);border-radius:14px;margin:10px 0;overflow:hidden}
+.card h2{margin:0;padding:10px 12px;color:#fff;background:linear-gradient(90deg,var(--hdr),#3a63aa);font-size:16px}
+.table{width:100%;border-collapse:separate;border-spacing:0;min-width:920px}
+.table th,.table td{padding:8px 10px;border-bottom:1px solid var(--br);text-align:center;vertical-align:middle}
+.thead th{position:sticky;top:52px;background:#eef2ff;z-index:1}
+.tr-sec th{text-align:left}
+.sec-sniadanie th{background:var(--s1)}.sec-drugie th{background:var(--s2)}.sec-obiad th{background:var(--s3)}.sec-kolacja th{background:var(--s4)}.sec-jogurt th{background:var(--s5)}
+.sum-row td{background:var(--sum);font-weight:700}.scroll{overflow:auto}
+.motto{padding:10px 12px;background:#eef6ff;border-left:4px solid var(--accent);font-style:italic}:root.dark .motto{background:#0e1a2a;color:#93c5fd}
+.pills{display:flex;flex-wrap:wrap;gap:6px;padding:8px;border-top:1px solid var(--br);background:#f9fafb}
+:root.dark .pills{background:#0b1320}.pill{background:#ecfeff;border:1px solid #a5f3fc;color:#075985;padding:6px 8px;border-radius:999px;font-size:12px}
+.pill.ok{border-color:#86efac;background:#ecfdf5;color:#166534}
+.pill.warn{border-color:#fcd34d;background:#fffbeb;color:#92400e}
+.pill.err{border-color:#fca5a5;background:#fef2f2;color:#991b1b}
+.checklist{padding:8px 12px;background:#f8fafc;border-top:1px dashed var(--br)}.checklist h3{margin:6px 0 8px 0;font-size:14px}
+.checklist ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px}
+.checklist li{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--br);border-radius:10px;background:#fff}
+:root.dark .checklist li{background:#0f172a}.cost{font-weight:700}
+.price-card td[contenteditable="true"]{outline:2px dashed transparent}.price-card td[contenteditable="true"]:focus{outline:2px dashed var(--accent);background:#eef6ff}
+.printbar{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.badge{display:inline-block;background:#fff;border:1px dashed var(--br);padding:6px 10px;border-radius:8px;font-size:12px;margin:6px 0 0 10px}
+.navday{display:flex;gap:8px;flex-wrap:wrap;padding:8px 12px;border-top:1px dashed var(--br);background:#f8fafc}
+.navday .btn{background:#eef2ff}
+.small{font-size:12px;opacity:.85}
+.controls .select{border-radius:10px;border:1px solid var(--br);padding:6px 10px;font-weight:700;background:#fff;color:#0b3b8a}
+:root.dark .select{background:#0f172a;color:#93c5fd;border-color:#334155}
+.chartWrap{display:flex;gap:16px;align-items:center;padding:10px 12px;border-top:1px dashed var(--br);flex-wrap:wrap}
+.chartWrap canvas{max-width:180px;max-height:180px}
+@media (max-width:700px){h1{font-size:16px}.table{min-width:680px}}
+@media print{.header,.tabs,.subtabs,.price-card,.printbar,.navday,.filterbar{display:none}body{background:#fff;color:#000}.card{box-shadow:none;margin:6px 0}}
+.print-mode-day .card.daycard{display:none}.print-mode-day .card.daycard.active{display:block}
+.print-mode-week .panel{display:none}.print-mode-week .panel.active{display:block}
+.print-mode-shopping .card:not(.shopping){display:none}
+/* ======= MOBILE LOVE ======= */
+.scroll{ -webkit-overflow-scrolling: touch; overscroll-behavior: contain; position:relative }
+.scroll::before,.scroll::after{
+  content:""; position:absolute; top:0; bottom:0; width:18px; pointer-events:none;
+  transition:opacity .2s; opacity:0; z-index:1
+}
+/* Cache-Control: public, max-age=0, must-revalidate */
+.scroll::before{ left:0; background:linear-gradient(90deg,var(--bg),rgba(255,255,255,0)) }
+.scroll::after{ right:0; background:linear-gradient(270deg,var(--bg),rgba(255,255,255,0)) }
+.scroll.show-left::before{ opacity:1 }
+.scroll.show-right::after{ opacity:1 }
+
+/* horyzontalny przewijak na sub-taby (dni) */
+.subtabs{ overflow-x:auto; -webkit-overflow-scrolling:touch; gap:8px; padding-bottom:6px }
+.subtabs::-webkit-scrollbar{ display:none }
+.subtab{ flex:0 0 auto }
+
+/* „kafelki” też przewijalne */
+.tabs{ overflow-x:auto; -webkit-overflow-scrolling:touch }
+.tabs::-webkit-scrollbar{ display:none }
+.tab{ flex:0 0 auto }
+
+/* przyciski – większe hitboxy na dotyk */
+.btn{ min-height:40px }
+
+/* wykres na telefonie mniejszy */
+.chartWrap{ gap:10px }
+.chartWrap canvas{ max-width:140px; max-height:140px }
+
+/* checklist 1 kolumna na małych ekranach */
+@media (max-width: 560px){
+  .header{ flex-direction:column; align-items:flex-start; gap:6px }
+  .controls{ width:100% }
+  .controls .btn, .controls .select{ flex:1 }
+  .pills{ gap:8px }
+  .pill{ font-size:11px }
+  .table th,.table td{ padding:6px 8px; font-size:13px }
+  .checklist ul{ grid-template-columns:1fr }
+  .navday{ gap:6px }
+  .navday .btn{ flex:1 }
+  .badge{ display:block; margin-left:12px }
+}
+
+/* lepszy widok „Tylko śniadania/obiady…” – ukryj puste nagłówki */
+tr.tr-sec[style*="display: none"] + tr.sum-row{ display:none !important }
+
+/* przeniesione z bloku <script> – styl cennika (maks. wysokość i brak "sticky" nagłówka) */
+.price-card details > .scroll{max-height:50vh; overflow:auto;}
+.price-card .thead th{position:static;} /* bez przyklejonego nagłówka w cenniku */
+</style>
+</head>
+<body>
+<div class="header">
+  <div>
+    <h1>Jadłospis dla Emila</h1>
+    <div class="sub">4 posiłki + jogurt • cel 2800 kcal • białko 75–85 g • ~50% tłuszczu • ~30% węgli • marki Lidl • makra w % • druk selektywny</div>
+  </div>
+  <div class="controls">
+    <button class="btn" onclick="_toggleDark()">🌗 Tryb ciemny</button>
+    <select id="mealFilter" class="select">
+      <option value="all">🔎 Pokaż: wszystko</option>
+      <option value="sniadanie">☀ Tylko śniadania</option>
+      <option value="drugie">🥪 Tylko II śniadania</option>
+      <option value="obiad">🍽 Tylko obiady</option>
+      <option value="kolacja">🌙 Tylko kolacje</option>
+      <option value="jogurt">🥛 Tylko jogurt</option>
+    </select>
+    <div class="printbar">
+      <button id="pDay" class="btn">🖨 Drukuj: bieżący dzień</button>
+      <button id="pWeek" class="btn">🖨 Drukuj: bieżący tydzień</button>
+      <button id="pShop" class="btn">🖨 Drukuj: tylko zakupy</button>
+      <button id="pAll" class="btn">🖨 Drukuj: wszystko</button>
+      <button id="autoKcal" class="btn">⚡ Auto 2800</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ======== CENNIK (edytowalny) ======== -->
+<div class="card price-card">
+    <h2>💶 Cennik produktów (edytowalny)</h2>
+    <details id="priceDetails" open>
+  <summary style="padding:8px 12px;cursor:pointer;font-weight:700">
+    Pokaż / ukryj cennik
+  </summary>
+    <div class="scroll">
+      <table id="priceTable" class="table">
+        <thead class="thead"><tr><th>Klucz</th><th>Jednostka</th><th>Cena</th></tr></thead>
+        <tbody>
+          <tr data-key="losos_filet_kg"><td>losos_filet_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">79.90</td></tr>
+          <tr data-key="dorsz_filet_kg"><td>dorsz_filet_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">49.90</td></tr>
+          <tr data-key="mintaj_filet_kg"><td>mintaj_filet_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">29.90</td></tr>
+          <tr data-key="indyk_piers_kg"><td>indyk_piers_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">39.90</td></tr>
+          <tr data-key="kurczak_piers_kg"><td>kurczak_piers_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">29.90</td></tr>
+          <tr data-key="oliwa_extra_vergine_l_1"><td>oliwa_extra_vergine_l_1</td><td>zł/l</td><td class="pval" contenteditable="true">27.99</td></tr>
+          <tr data-key="kasza_gryczana_1kg"><td>kasza_gryczana_1kg</td><td>zł/1kg</td><td class="pval" contenteditable="true">9.99</td></tr>
+          <tr data-key="ryz_basmati_1kg"><td>ryz_basmati_1kg</td><td>zł/1kg</td><td class="pval" contenteditable="true">12.99</td></tr>
+          <tr data-key="kuskus_1kg"><td>kuskus_1kg</td><td>zł/1kg</td><td class="pval" contenteditable="true">9.99</td></tr>
+          <tr data-key="platki_owsiane_1kg"><td>platki_owsiane_1kg</td><td>zł/1kg</td><td class="pval" contenteditable="true">6.99</td></tr>
+          <tr data-key="hummus_pojemnik_180g"><td>hummus_pojemnik_180g</td><td>zł/180g</td><td class="pval" contenteditable="true">5.49</td></tr>
+          <tr data-key="jogurt_naturalny_200g"><td>jogurt_naturalny_200g</td><td>zł/200g</td><td class="pval" contenteditable="true">2.19</td></tr>
+          <tr data-key="chleb_zytni_bochenek_700g"><td>chleb_zytni_bochenek_700g</td><td>zł/700g</td><td class="pval" contenteditable="true">6.99</td></tr>
+          <tr data-key="ser_feta_kg"><td>ser_feta_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">39.90</td></tr>
+          <tr data-key="twarog_poltl_kg"><td>twarog_poltl_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">19.90</td></tr>
+          <tr data-key="orzechy_wloskie_kg"><td>orzechy_wloskie_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">49.90</td></tr>
+          <tr data-key="migdaly_kg"><td>migdaly_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">59.90</td></tr>
+          <tr data-key="pestki_dyni_kg"><td>pestki_dyni_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">29.90</td></tr>
+          <tr data-key="awokado_szt"><td>awokado_szt</td><td>zł/szt</td><td class="pval" contenteditable="true">4.99</td></tr>
+          <tr data-key="papryka_czerwona_kg"><td>papryka_czerwona_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">12.99</td></tr>
+          <tr data-key="pomidor_kg"><td>pomidor_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">9.99</td></tr>
+          <tr data-key="ogorek_kg"><td>ogorek_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">7.99</td></tr>
+          <tr data-key="cebula_kg"><td>cebula_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">3.99</td></tr>
+          <tr data-key="marchew_kg"><td>marchew_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">3.99</td></tr>
+          <tr data-key="brokul_kg"><td>brokul_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">9.99</td></tr>
+          <tr data-key="kalafior_szt"><td>kalafior_szt</td><td>zł/szt</td><td class="pval" contenteditable="true">7.99</td></tr>
+          <tr data-key="mix_warzyw_mroz_450g"><td>mix_warzyw_mroz_450g</td><td>zł/450g</td><td class="pval" contenteditable="true">6.49</td></tr>
+          <tr data-key="jajka_10szt"><td>jajka_10szt</td><td>zł/10szt</td><td class="pval" contenteditable="true">12.99</td></tr>
+        </tbody>
+      </table>
+    </div>
+    </details>
+    <div class="badge">💡 Edytuj ceny (PLN). Zapisywane lokalnie – koszty i sumy zakupów przeliczą się same.</div>
+  </div>  
+
+  <!-- ======== ZAKŁADKI TYGODNI ======== -->
+  <div class="tabs" id="weekTabs"></div>
+  <div id="weeksRoot"></div>
+
+  <!-- ======== ZAKUPY – wybór tygodnia ======== -->
+  <div class="card shopping">
+    <h2>🧾 Podsumowanie zakupów tygodniowych</h2>
+    <div id="shoppingWeeks" class="pills"></div>
+    <div id="shoppingListWrap" style="padding:10px 12px"></div>
+    <div class="small" style="padding:0 12px 10px">Kliknij tydzień powyżej, by zobaczyć listę produktów i łączny koszt.</div>
+  </div>
+
+</div>
+
+<script>
+/* ============ NUTRI DB (na 100 g) ============ */
+const NUTRI = {
+  maslo_orzechowe:{ brand:'McEnnedy/Alesto', kcal:600, p:25, f:50, c:20 },
+  orzechy_nerkowca:{ brand:'Alesto', kcal:553, p:18, f:44, c:30 },
+  slonecznik:{ brand:'Alesto', kcal:584, p:21, f:51, c:20 },
+  siemie_lniane:{ brand:'Alesto', kcal:534, p:18, f:42, c:29 },
+  banan: { brand:'Owoce świeże', kcal:89,  p:1.1, f:0.3, c:23 },
+  jablko:{ brand:'Owoce świeże', kcal:52,  p:0.3, f:0.2, c:14 },
+  borowki:{ brand:'Owoce świeże', kcal:57,  p:0.7, f:0.3, c:14 },
+  jajko:  { brand:'-', kcal:143, p:12.6, f:10.6, c:0.7, priceKey:'jajka_10szt', unit:'szt', unitGram:50, pricePerUnit:true },
+  oliwa:  { brand:'Primadonna Extra Vergine', kcal:884, p:0, f:100, c:0, priceKey:'oliwa_extra_vergine_l_1' },
+  chleb_zytni:{ brand:'Piekarnia Lidl – żytni', kcal:220, p:6, f:1.5, c:43, priceKey:'chleb_zytni_bochenek_700g' },
+  papryka:{ brand:'Warzywa świeże', kcal:31, p:1, f:0.3, c:6, priceKey:'papryka_czerwona_kg' },
+  ogorek: { brand:'Warzywa świeże', kcal:15, p:0.7, f:0.1, c:3.6, priceKey:'ogorek_kg' },
+  pomidor:{ brand:'Warzywa świeże', kcal:18, p:0.9, f:0.2, c:3.9, priceKey:'pomidor_kg' },
+  cebula: { brand:'Warzywa świeże', kcal:40, p:1.1, f:0.1, c:9.3, priceKey:'cebula_kg' },
+  marchew:{ brand:'Warzywa świeże', kcal:41, p:0.9, f:0.2, c:10, priceKey:'marchew_kg' },
+  mix_mroz:{ brand:'Mrożone (marchew+brokuł+kalafior)', kcal:34, p:2.5, f:0.4, c:5.9, priceKey:'mix_warzyw_mroz_450g', packed:450 },
+  hummus: { brand:'Vemondo', kcal:240, p:7, f:18, c:13, priceKey:'hummus_pojemnik_180g', packed:180 },
+  jogurt2:{ brand:'Pilos 2%', kcal:62, p:4, f:2, c:5, priceKey:'jogurt_naturalny_200g', packed:200 },
+  feta:   { brand:'Pilos/Eridanous', kcal:265, p:14.2, f:21.5, c:3.9, priceKey:'ser_feta_kg' },
+  twarog: { brand:'Pilos', kcal:132, p:18, f:6, c:3.4, priceKey:'twarog_poltl_kg' },
+  orzechy_wloskie:{ brand:'Alesto', kcal:654, p:15, f:65, c:14, priceKey:'orzechy_wloskie_kg' },
+  migdaly:{ brand:'Alesto', kcal:579, p:21, f:50, c:22, priceKey:'migdaly_kg' },
+  pestki_dyni:{ brand:'Alesto', kcal:559, p:30, f:49, c:11, priceKey:'pestki_dyni_kg' },
+  platki_owsiane:{ brand:'Crownfield', kcal:371, p:12.5, f:7, c:60, priceKey:'platki_owsiane_1kg' },
+  kasza_gryczana_sucha:{ brand:'Golden Sun', kcal:346, p:13, f:3, c:69, priceKey:'kasza_gryczana_1kg' },
+  ryz_basmati_suchy:   { brand:'Golden Sun', kcal:360, p:7.1, f:0.6, c:79, priceKey:'ryz_basmati_1kg' },
+  kuskus_suchy:        { brand:'Golden Sun', kcal:376, p:12, f:0.6, c:77, priceKey:'kuskus_1kg' },
+  // białka
+  dorsz:  { brand:'Rybak Morski', kcal:82, p:18, f:0.7, c:0, priceKey:'dorsz_filet_kg' },
+  mintaj: { brand:'Ocean Sea',    kcal:90, p:17, f:2,   c:0, priceKey:'mintaj_filet_kg' },
+  losos:  { brand:'Rybak Morski', kcal:208,p:20, f:13,  c:0, priceKey:'losos_filet_kg' },
+  indyk:  { brand:'Piękna Kurka', kcal:105,p:23, f:1.5, c:0, priceKey:'indyk_piers_kg' },
+  kurczak:{ brand:'Kania',        kcal:120,p:22, f:2.6, c:0, priceKey:'kurczak_piers_kg' },
+  awokado:{ brand:'Owoce', kcal:160, p:2, f:15, c:9, priceKey:'awokado_szt', unit:'szt', unitGram:180, pricePerUnit:true },
+};
+
+/* ============ CENY – odczyt/zapis ============ */
+const PRICE_STORE_KEY = 'emil_prices_v2';
+function loadPrices(){
+  const saved = localStorage.getItem(PRICE_STORE_KEY);
+  let map = {};
+  if(saved){ try{ map = JSON.parse(saved) || {} }catch(e){} }
+  document.querySelectorAll('#priceTable tbody tr').forEach(tr=>{
+    const key = tr.getAttribute('data-key');
+    const val = parseFloat(tr.querySelector('.pval').textContent.replace(',','.'))||0;
+    if(!(key in map)) map[key]=val;
+  });
+  return map;
+}
+function savePrices(){
+  const map={};
+  document.querySelectorAll('#priceTable tbody tr').forEach(tr=>{
+    const key = tr.getAttribute('data-key');
+    const val = parseFloat(tr.querySelector('.pval').textContent.replace(',','.'))||0;
+    map[key]=val;
+  });
+  try{ localStorage.setItem(PRICE_STORE_KEY, JSON.stringify(map)); }catch(e){}
+}
+
+// styles for .price-card were moved to the <style> block in the document head
+
+// sync UI edits to storage and re-render
+document.addEventListener('input', e=>{
+  if(e.target.matches('.price-card .pval')) { savePrices(); renderAll(); }
+});
+/* ============ POMOCNICZE ============ */
+const kcalFromMacros = (p,f,c)=> (p*4 + f*9 + c*4);
+const pct = (num,den)=> den>0 ? Math.round((num/den)*100) : 0;
+const fmt = n => (Math.round(n*100)/100).toFixed(2);
+
+/* ============ KOSZT jednostkowy ============ */
+function priceFor(ingKey, grams, prices){
+  const nd = NUTRI[ingKey]; if(!nd || !nd.priceKey) return 0;
+  const price = prices[nd.priceKey] ?? 0;
+
+  if(nd.pricePerUnit && nd.unit==='szt'){
+    const perGram = price / (nd.unitGram || grams || 1);
+    return perGram * grams;
+  }
+  if(nd.priceKey==='oliwa_extra_vergine_l_1'){ // 1 l ~ 1000 g (upraszczamy do przeliczeń)
+    return (price/1000) * grams;
+  }
+  if(nd.packed){ return (price / nd.packed) * grams; }
+  if(nd.priceKey.endsWith('_1kg') || nd.priceKey.endsWith('_kg')) return (price/1000) * grams;
+  if(nd.priceKey.endsWith('_700g')) return (price/700) * grams;
+  if(nd.priceKey.endsWith('_450g')) return (price/450) * grams;
+  if(nd.priceKey.endsWith('_200g')) return (price/200) * grams;
+  if(nd.priceKey.endsWith('_180g')) return (price/180) * grams;
+  if(nd.priceKey.endsWith('_10szt')){
+    const perEgg = price/10, perGram = perEgg/(nd.unitGram||50);
+    return perGram*grams;
+  }
+  if(nd.priceKey.endsWith('_szt')){
+    return (price/(nd.unitGram||180))*grams;
+  }
+  return 0;
+}
+
+/* ============ OBLICZENIA pozycji ============ */
+function computeItem(ingKey, grams, labelOverride){
+  const nd = NUTRI[ingKey]; if(!nd) return null;
+  const ratio = grams/100;
+  const p = +(nd.p*ratio).toFixed(1);
+  const f = +(nd.f*ratio).toFixed(1);
+  const c = +(nd.c*ratio).toFixed(1);
+  const kcal = Math.round(kcalFromMacros(p,f,c));
+  return { key:ingKey, brand:nd.brand||'-', label:labelOverride || ingKey, grams, kcal, p, f, c };
+}
+
+/* ============ NAZWY POSIŁKÓW ============ */
+const MEAL_NAMES = {
+  sniadanie:'☀ Śniadanie',
+  drugie:'🥪 II śniadanie',
+  obiad:'🍽 Obiad',
+  kolacja:'🌙 Kolacja',
+  jogurt:'🥛 Jogurt'
+};
+
+/* ============ PLAN – 4 tygodnie ============ */
+const PLAN = {
+  week1:{ title:'📘 Tydzień 1', days:[
+    {day:'Dzień 1',motto:'Dzień dobry – energia z mądrą miską!',meals:{
+      sniadanie:[{k:'jajko',g:50,l:'Jajko 1 szt.'},{k:'oliwa',g:10,l:'Oliwa'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'papryka',g:50,l:'Papryka'},{k:'orzechy_wloskie',g:15,l:'Orzechy włoskie'}],
+      drugie:[{k:'hummus',g:60,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'indyk',g:120,l:'Pierś z indyka'},{k:'kasza_gryczana_sucha',g:70,l:'Kasza gryczana (sucha)'},{k:'oliwa',g:20,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'},{k:'hummus',g:30,l:'Hummus'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'awokado',g:100,l:'Awokado'},{k:'oliwa',g:20,l:'Oliwa'},{k:'cebula',g:20,l:'Cebula'},{k:'migdaly',g:10,l:'Migdały'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'},{k:'orzechy_wloskie',g:10,l:'Orzechy (do jogurtu)'}]}},
+    {day:'Dzień 2',motto:'Krok po kroku, zdrowo i smacznie.',meals:{
+      sniadanie:[{k:'jajko',g:50,l:'Jajko 1 szt.'},{k:'oliwa',g:15},{k:'chleb_zytni',g:80},{k:'pomidor',g:60}],
+      drugie:[{k:'hummus',g:50},{k:'chleb_zytni',g:80},{k:'papryka',g:80},{k:'migdaly',g:15,l:'Migdały'}],
+      obiad:[{k:'dorsz',g:150,l:'Dorsz filet'},{k:'ryz_basmati_suchy',g:75,l:'Ryż basmati (suchy)'},{k:'oliwa',g:15},{k:'mix_mroz',g:200},{k:'hummus',g:30}],
+      kolacja:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'oliwa',g:15},{k:'chleb_zytni',g:60},{k:'ogorek',g:60}],
+      jogurt:[{k:'jogurt2',g:200},{k:'pestki_dyni',g:10,l:'Pestki dyni (do jogurtu)'}]}},
+    {day:'Dzień 3',motto:'Stałość wygrywa – talerz też 😉',meals:{
+      sniadanie:[{k:'chleb_zytni',g:90},{k:'hummus',g:50},{k:'ogorek',g:80},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      drugie:[{k:'jajko',g:50,l:'Jajko 1 szt.'},{k:'chleb_zytni',g:70},{k:'pomidor',g:80}],
+      obiad:[{k:'mintaj',g:160,l:'Mintaj filet'},{k:'kuskus_suchy',g:80,l:'Kuskus (suchy)'},{k:'oliwa',g:15},{k:'mix_mroz',g:200},{k:'hummus',g:30}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'feta',g:30},{k:'oliwa',g:15},{k:'papryka',g:60},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200},{k:'migdaly',g:10,l:'Migdały (do jogurtu)'}]}},
+    {day:'Dzień 4',motto:'Siła w prostocie. I w kaszy.',meals:{
+      sniadanie:[{k:'jajko',g:50},{k:'oliwa',g:15},{k:'chleb_zytni',g:80},{k:'cebula',g:25}],
+      drugie:[{k:'hummus',g:60},{k:'chleb_zytni',g:80},{k:'ogorek',g:100},{k:'orzechy_wloskie',g:15,l:'Orzechy włoskie'}],
+      obiad:[{k:'dorsz',g:140},{k:'kasza_gryczana_sucha',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200},{k:'hummus',g:30}],
+      kolacja:[{k:'jajko',g:50},{k:'oliwa',g:10},{k:'chleb_zytni',g:60},{k:'pomidor',g:60},{k:'migdaly',g:10,l:'Migdały'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 5',motto:'Smak i spokój – to Twój dzień.',meals:{
+      sniadanie:[{k:'chleb_zytni',g:80},{k:'feta',g:30},{k:'oliwa',g:15},{k:'papryka',g:60}],
+      drugie:[{k:'hummus',g:50},{k:'chleb_zytni',g:80},{k:'marchew',g:100},{k:'migdaly',g:15,l:'Migdały'}],
+      obiad:[{k:'losos',g:130},{k:'ryz_basmati_suchy',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200},{k:'hummus',g:30}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'awokado',g:100},{k:'oliwa',g:15},{k:'papryka',g:50},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 6',motto:'Lekko, ale treściwie. I pysznie.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:60},{k:'migdaly',g:15},{k:'oliwa',g:10},{k:'pomidor',g:60}],
+      drugie:[{k:'twarog',g:150},{k:'chleb_zytni',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'mintaj',g:170},{k:'kuskus_suchy',g:70},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'feta',g:25},{k:'oliwa',g:15},{k:'ogorek',g:80},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 7',motto:'Regeneracja też ma smak.',meals:{
+      sniadanie:[{k:'jajko',g:100,l:'Jajka 2 szt.'},{k:'oliwa',g:10},{k:'chleb_zytni',g:80}],
+      drugie:[{k:'hummus',g:60},{k:'chleb_zytni',g:70},{k:'ogorek',g:80},{k:'pestki_dyni',g:10}],
+      obiad:[{k:'dorsz',g:160},{k:'kasza_gryczana_sucha',g:70},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'awokado',g:120},{k:'oliwa',g:15},{k:'migdaly',g:10,l:'Migdały'}],
+      jogurt:[{k:'jogurt2',g:200},{k:'orzechy_wloskie',g:10,l:'Orzechy (do jogurtu)'}]}},
+    {day:'Zakupy_T1',motto:'Lista zbiorcza dla Tygodnia 1',shopping:true}
+  ]},
+  week2:{ title:'📘 Tydzień 2', days:[
+    {day:'Dzień 1',motto:'Start tygodnia na lekko i do syta.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:70},{k:'migdaly',g:15},{k:'oliwa',g:10}],
+      drugie:[{k:'hummus',g:50},{k:'chleb_zytni',g:80},{k:'papryka',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'losos',g:140},{k:'ryz_basmati_suchy',g:75},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'twarog',g:150},{k:'oliwa',g:15},{k:'chleb_zytni',g:60},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 2',motto:'Konsekwencja smakuje najlepiej.',meals:{
+      sniadanie:[{k:'jajko',g:50},{k:'oliwa',g:15},{k:'chleb_zytni',g:80},{k:'pomidor',g:60}],
+      drugie:[{k:'hummus',g:60},{k:'chleb_zytni',g:80},{k:'ogorek',g:100},{k:'orzechy_wloskie',g:15,l:'Orzechy włoskie'}],
+      obiad:[{k:'mintaj',g:170},{k:'kuskus_suchy',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'feta',g:30},{k:'oliwa',g:15},{k:'papryka',g:60}],
+      jogurt:[{k:'jogurt2',g:200},{k:'migdaly',g:10,l:'Migdały (do jogurtu)'}]}},
+    {day:'Dzień 3',motto:'Prosto znaczy dobrze.',meals:{
+      sniadanie:[{k:'chleb_zytni',g:90},{k:'hummus',g:50},{k:'ogorek',g:80}],
+      drugie:[{k:'jajko',g:100,l:'Jajka 2 szt.'},{k:'chleb_zytni',g:60},{k:'migdaly',g:10,l:'Migdały'}],
+      obiad:[{k:'dorsz',g:160},{k:'kasza_gryczana_sucha',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'twarog',g:150},{k:'oliwa',g:15},{k:'papryka',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 4',motto:'W połowie drogi – energia rośnie.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:60},{k:'orzechy_wloskie',g:15},{k:'oliwa',g:10}],
+      drugie:[{k:'hummus',g:50},{k:'chleb_zytni',g:80},{k:'pomidor',g:80},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'losos',g:150},{k:'ryz_basmati_suchy',g:75},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'awokado',g:100},{k:'oliwa',g:15},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 5',motto:'Jeszcze tylko trochę – idzie świetnie.',meals:{
+      sniadanie:[{k:'jajko',g:50},{k:'oliwa',g:10},{k:'chleb_zytni',g:80},{k:'papryka',g:60}],
+      drugie:[{k:'twarog',g:150},{k:'chleb_zytni',g:60},{k:'migdaly',g:15,l:'Migdały'}],
+      obiad:[{k:'mintaj',g:170},{k:'kuskus_suchy',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'feta',g:25},{k:'oliwa',g:15},{k:'ogorek',g:80}],
+      jogurt:[{k:'jogurt2',g:200},{k:'orzechy_wloskie',g:10,l:'Orzechy (do jogurtu)'}]}},
+    {day:'Dzień 6',motto:'Lekko i sprytnie – równowaga.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:70},{k:'migdaly',g:15},{k:'oliwa',g:10}],
+      drugie:[{k:'hummus',g:60},{k:'chleb_zytni',g:70},{k:'pomidor',g:60},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      obiad:[{k:'dorsz',g:160},{k:'kasza_gryczana_sucha',g:70},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'twarog',g:150},{k:'oliwa',g:15},{k:'papryka',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 7',motto:'Finał tygodnia – pyszna regeneracja.',meals:{
+      sniadanie:[{k:'jajko',g:100,l:'Jajka 2 szt.'},{k:'oliwa',g:10},{k:'chleb_zytni',g:80}],
+      drugie:[{k:'hummus',g:50},{k:'chleb_zytni',g:80},{k:'ogorek',g:100},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'losos',g:140},{k:'ryz_basmati_suchy',g:75},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'awokado',g:100},{k:'oliwa',g:15},{k:'migdaly',g:10,l:'Migdały'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Zakupy_T2',motto:'Lista zbiorcza dla Tygodnia 2',shopping:true}
+  ]},
+  week3:{ title:'📘 Tydzień 3', days:[
+    {day:'Dzień 1',motto:'Świeży początek nowego tygodnia.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:70},{k:'orzechy_wloskie',g:15},{k:'oliwa',g:10}],
+      drugie:[{k:'hummus',g:60},{k:'chleb_zytni',g:80},{k:'ogorek',g:100},{k:'migdaly',g:10,l:'Migdały'}],
+      obiad:[{k:'dorsz',g:150},{k:'kasza_gryczana_sucha',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'twarog',g:150},{k:'oliwa',g:15},{k:'pomidor',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 2',motto:'Energia w prostocie posiłków.',meals:{
+      sniadanie:[{k:'jajko',g:100},{k:'oliwa',g:10},{k:'chleb_zytni',g:80}],
+      drugie:[{k:'hummus',g:50},{k:'chleb_zytni',g:80},{k:'papryka',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'mintaj',g:160},{k:'ryz_basmati_suchy',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'feta',g:30},{k:'oliwa',g:15},{k:'ogorek',g:80},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 3',motto:'Stała forma to też stały jadłospis.',meals:{
+      sniadanie:[{k:'chleb_zytni',g:90},{k:'hummus',g:50},{k:'pomidor',g:80}],
+      drugie:[{k:'jajko',g:50},{k:'chleb_zytni',g:70},{k:'migdaly',g:10,l:'Migdały'}],
+      obiad:[{k:'losos',g:140},{k:'kuskus_suchy',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'twarog',g:150},{k:'oliwa',g:15},{k:'papryka',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 4',motto:'Połowa tygodnia, pełna siła.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:60},{k:'migdaly',g:15},{k:'oliwa',g:10}],
+      drugie:[{k:'hummus',g:60},{k:'chleb_zytni',g:80},{k:'ogorek',g:80},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      obiad:[{k:'dorsz',g:160},{k:'kasza_gryczana_sucha',g:80},{k:'oliwa',g:15},{k:'mix_mroz',g:200}],
+      kolacja:[{k:'chleb_zytni',g:60},{k:'awokado',g:100},{k:'oliwa',g:15},{k:'migdaly',g:10,l:'Migdały'}],
+      jogurt:[{k:'jogurt2',g:200}]}},
+    {day:'Dzień 5',motto:'Wytrwale do końca tygodnia.',meals:{
+      sniadanie:[{k:'jajko',g:50},{k:'oliwa',g:15},{k:'chleb_zytni',g:80},{k:'papryka',g:60}],
+      drugie:[{k:'twarog',g:150},{k:'chleb_zytni',g:60},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'mintaj',g:170,l:'Mintaj filet'},{k:'ryz_basmati_suchy',g:75,l:'Ryż basmati (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'feta',g:25,l:'Feta'},{k:'oliwa',g:15,l:'Oliwa'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Dzień 6',motto:'Lekkość na weekendzie.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'orzechy_wloskie',g:15,l:'Orzechy włoskie'},{k:'oliwa',g:10,l:'Oliwa'}],
+      drugie:[{k:'hummus',g:50,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      obiad:[{k:'losos',g:150,l:'Łosoś filet'},{k:'kuskus_suchy',g:80,l:'Kuskus (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'oliwa',g:15,l:'Oliwa'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Dzień 7',motto:'Niedzielna regeneracja.',meals:{
+      sniadanie:[{k:'jajko',g:100,l:'Jajka 2 szt.'},{k:'oliwa',g:10,l:'Oliwa'},{k:'chleb_zytni',g:80,l:'Chleb żytni'}],
+      drugie:[{k:'hummus',g:60,l:'Hummus'},{k:'chleb_zytni',g:70,l:'Chleb żytni'},{k:'migdaly',g:10,l:'Migdały'}],
+      obiad:[{k:'dorsz',g:160,l:'Dorsz filet'},{k:'kasza_gryczana_sucha',g:80,l:'Kasza gryczana (sucha)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'awokado',g:100,l:'Awokado'},{k:'oliwa',g:15,l:'Oliwa'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Zakupy_T3',motto:'Lista zbiorcza dla Tygodnia 3',shopping:true}
+  ]},
+  week4:{ title:'📘 Tydzień 4', days:[
+    {day:'Dzień 1',motto:'Start ostatniego tygodnia – smacznie.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:60,l:'Płatki owsiane'},{k:'migdaly',g:15,l:'Migdały'},{k:'oliwa',g:10,l:'Oliwa'}],
+      drugie:[{k:'hummus',g:60,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'losos',g:140,l:'Łosoś filet'},{k:'ryz_basmati_suchy',g:75,l:'Ryż basmati (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'oliwa',g:15,l:'Oliwa'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Dzień 2',motto:'Stałość daje wyniki.',meals:{
+      sniadanie:[{k:'jajko',g:50,l:'Jajko 1 szt.'},{k:'oliwa',g:15,l:'Oliwa'},{k:'chleb_zytni',g:80,l:'Chleb żytni'}],
+      drugie:[{k:'hummus',g:50,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'pomidor',g:60,l:'Pomidor'},{k:'migdaly',g:15,l:'Migdały'}],
+      obiad:[{k:'dorsz',g:160,l:'Dorsz filet'},{k:'kasza_gryczana_sucha',g:80,l:'Kasza gryczana (sucha)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'feta',g:25,l:'Feta'},{k:'oliwa',g:15,l:'Oliwa'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'},{k:'pestki_dyni',g:10,l:'Pestki dyni (do jogurtu)'}]}},
+    {day:'Dzień 3',motto:'Prosto i wartościowo.',meals:{
+      sniadanie:[{k:'chleb_zytni',g:90,l:'Chleb żytni'},{k:'hummus',g:50,l:'Hummus'}],
+      drugie:[{k:'jajko',g:100,l:'Jajka 2 szt.'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'mintaj',g:170,l:'Mintaj filet'},{k:'ryz_basmati_suchy',g:80,l:'Ryż basmati (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'oliwa',g:15,l:'Oliwa'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Dzień 4',motto:'Połowa tygodnia – siła.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:60,l:'Płatki owsiane'},{k:'orzechy_wloskie',g:15,l:'Orzechy włoskie'},{k:'oliwa',g:10,l:'Oliwa'}],
+      drugie:[{k:'hummus',g:50,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'papryka',g:60,l:'Papryka'},{k:'migdaly',g:10,l:'Migdały'}],
+      obiad:[{k:'losos',g:150,l:'Łosoś filet'},{k:'kuskus_suchy',g:80,l:'Kuskus (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'awokado',g:100,l:'Awokado'},{k:'oliwa',g:15,l:'Oliwa'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Dzień 5',motto:'Drobne zmiany – ten sam cel.',meals:{
+      sniadanie:[{k:'jajko',g:50,l:'Jajko 1 szt.'},{k:'oliwa',g:15,l:'Oliwa'},{k:'chleb_zytni',g:80,l:'Chleb żytni'}],
+      drugie:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      obiad:[{k:'dorsz',g:150,l:'Dorsz filet'},{k:'kasza_gryczana_sucha',g:80,l:'Kasza gryczana (sucha)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'feta',g:30,l:'Feta'},{k:'oliwa',g:15,l:'Oliwa'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'},{k:'migdaly',g:10,l:'Migdały (do jogurtu)'}]}},
+    {day:'Dzień 6',motto:'Lekkość weekendu.',meals:{
+      sniadanie:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'migdaly',g:15,l:'Migdały'},{k:'oliwa',g:10,l:'Oliwa'}],
+      drugie:[{k:'hummus',g:50,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      obiad:[{k:'mintaj',g:160,l:'Mintaj filet'},{k:'kuskus_suchy',g:80,l:'Kuskus (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'oliwa',g:15,l:'Oliwa'},{k:'orzechy_wloskie',g:10,l:'Orzechy'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Dzień 7',motto:'Finał miesiąca – regeneracja.',meals:{
+      sniadanie:[{k:'jajko',g:100,l:'Jajka 2 szt.'},{k:'oliwa',g:10,l:'Oliwa'},{k:'chleb_zytni',g:80,l:'Chleb żytni'}],
+      drugie:[{k:'hummus',g:60,l:'Hummus'},{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'migdaly',g:10,l:'Migdały'}],
+      obiad:[{k:'losos',g:150,l:'Łosoś filet'},{k:'ryz_basmati_suchy',g:80,l:'Ryż basmati (suchy)'},{k:'oliwa',g:15,l:'Oliwa'},{k:'mix_mroz',g:200,l:'Mix warzyw mrożonych'}],
+      kolacja:[{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'awokado',g:100,l:'Awokado'},{k:'oliwa',g:15,l:'Oliwa'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}],
+      jogurt:[{k:'jogurt2',g:200,l:'Jogurt naturalny 2%'}]}},
+    {day:'Zakupy_T4',motto:'Lista zbiorcza dla Tygodnia 4',shopping:true}
+  ]}
+};
+/* ======= KONIEC PLAN ======= */
+
+
+/* ============ RENDER TABELI DNIA ============ */
+function renderDayTable(dayObj, weekKey, dayIndex){
+  if(dayObj.shopping){
+    return `<div class="card daycard" data-week="${weekKey}" data-day="${dayObj.day}">
+      <h2>${PLAN[weekKey].title} – 🛒 Zakupy</h2>
+      <div class="motto">„${dayObj.motto}” • Przejdź do sekcji <b>Podsumowanie zakupów tygodniowych</b> poniżej.</div>
+      <div class="pills"><span class="pill">🧾 Zestawienie liczone z całego tygodnia</span></div>
+    </div>`;
+  }
+
+  const sections = ['sniadanie','drugie','obiad','kolacja','jogurt'];
+  const rows = [];
+
+  sections.forEach(sec=>{
+    const headerClass = sec==='sniadanie'?'sec-sniadanie':sec==='drugie'?'sec-drugie':sec==='obiad'?'sec-obiad':sec==='kolacja'?'sec-kolacja':'sec-jogurt';
+    rows.push(`<tr class="tr-sec ${headerClass}" data-sec="${sec}"><th colspan="12">${MEAL_NAMES[sec]}</th></tr>`);
+    (dayObj.meals[sec]||[]).forEach(item=>{
+      const it = computeItem(item.k, item.g, item.l);
+      const kcalP = it.p*4, kcalF=it.f*9, kcalC=it.c*4;
+      const pctP = pct(kcalP, it.kcal), pctF=pct(kcalF, it.kcal), pctC=pct(kcalC, it.kcal);
+      rows.push(`<tr data-sec="${sec}">
+        <td>${MEAL_NAMES[sec].split(' ')[0]}</td>
+        <td>${item.l || item.k}</td>
+        <td>${item.g}</td>
+        <td>${it.brand||'-'}</td>
+        <td class="kcal">${it.kcal}</td>
+        <td class="p">${it.p.toFixed(1)}</td>
+        <td class="f">${it.f.toFixed(1)}</td>
+        <td class="c">${it.c.toFixed(1)}</td>
+        <td class="pctp">${pctP}%</td>
+        <td class="pctf">${pctF}%</td>
+        <td class="pctc">${pctC}%</td>
+        <td><span class="row-price" data-k="${item.k}" data-g="${item.g}"></span></td>
+      </tr>`);
+    });
+
+    rows.push(`<tr class="sum-row" data-sum="${sec}">
+      <td colspan="4"><b>SUMA – ${MEAL_NAMES[sec]}</b></td>
+      <td class="sum-kcal">0</td><td class="sum-p">0</td><td class="sum-f">0</td><td class="sum-c">0</td>
+      <td class="sum-pctp"></td><td class="sum-pctf"></td><td class="sum-pctc"></td>
+      <td class="sum-cost"></td>
+    </tr>`);
+  });
+
+  rows.push(`<tr class="sum-row" data-sum="day">
+    <td colspan="4"><b>✅ SUMA DNIA</b></td>
+    <td class="day-kcal">0</td><td class="day-p">0</td><td class="day-f">0</td><td class="day-c">0</td>
+    <td class="day-pctp"></td><td class="day-pctf"></td><td class="day-pctc"></td>
+    <td class="day-cost"></td>
+  </tr>`);
+
+  // checklist
+  const checklist = [];
+  Object.entries(dayObj.meals).forEach(([sec,items])=>{
+    (items||[]).forEach(it=>{
+      const label = (it.l || it.k).replaceAll('_',' ');
+      const id = `chk|${weekKey}|${dayObj.day}|${label}|${it.g}`;
+      checklist.push(`<li><label><input type="checkbox" data-id="${id}"> ${label} — <b>${it.g} g</b></label></li>`);
+    });
+  });
+
+  return `
+  <div class="card daycard" data-week="${weekKey}" data-day="${dayObj.day}">
+    <h2>${PLAN[weekKey].title} – ${dayObj.day}</h2>
+    <div class="motto">„${dayObj.motto}” • Miłego dnia i smacznego! 😋</div>
+    <div class="scroll">
+      <table class="table">
+        <thead class="thead">
+          <tr><th>Posiłek</th><th>Produkt</th><th>Gramatura (g)</th><th>Marka Lidl</th>
+              <th>Kalorie</th><th>Białko (g)</th><th>Tłuszcz (g)</th><th>Węglowodany (g)</th>
+              <th>% Białko</th><th>% Tłuszcz</th><th>% Węgle</th><th>Cena (szac.)</th></tr>
+        </thead>
+        <tbody>${rows.join('')}</tbody>
+      </table>
+    </div>
+ <div class="chartWrap">
+      <canvas width="200" height="200"></canvas>
+      <div class="small">Wykres makro dnia (udział kcal %): białko / tłuszcz / węglowodany.</div>
+    </div>
+<div class="pills">
+      <span class="pill cost">Koszt dnia: <b class="pill-cost">…</b></span>
+      <span class="pill kcal"><b>🎯 Cel kcal: 2800</b> • <span class="kcal-status">—</span></span>
+      <span class="pill macro"><b>🎯 Makro: 50/30/20</b> • <span class="macro-status">—</span></span>
+      <span class="pill">✅ Smacznego!</span>
+      <span class="pill">💪 Trzymaj rytm!</span>
+    </div>
+  </div> <!-- zamknięcie .card.daycard i KONIEC -->
+  <div class="checklist">
+    <h3>🛒 Lista zakupów na dziś</h3>
+    <ul>${checklist.join('')}</ul>
+  </div>
+  <div class="navday">
+    <button class="btn btn-prev">⬅ Poprzedni dzień</button>
+    <button class="btn btn-next">Następny dzień ➡</button>
+  </div>
+  `;
+}
+/* ---- Cele i tolerancje ---- */
+const TARGET_KCAL = 2800;
+// 50% tł, 30% węgle, 20% białko – tak jak w UI
+const TARGETS = { P:0.20, F:0.50, C:0.30 };
+const TOLERANCE_KCAL = 100;
+const TOL_PCT_PT = 3;
+
+// ogranicznik oliwy w autokorekcie
+const MAX_OIL_CORR_G = 15; // max ~135 kcal z oliwy na dzień
+
+function gramsForMacroFromFood(foodKey, macro, targetDeltaKcal){
+  const nd = NUTRI[foodKey]; if(!nd) return 0;
+  const per100 = (macro==='P'? nd.p*4 : macro==='F'? nd.f*9 : nd.c*4);
+  const perGram = per100/100;
+  if(perGram<=0) return 0;
+  // zaokrąglamy do 5 g
+  return Math.max(0, Math.round((targetDeltaKcal/perGram)/5)*5);
+}
+/* kcal/gram – gałki do korekt */
+const KCAL_PER_G_OLIWA = 9; // ~100% tłuszczu
+
+function gramsOfOliveFor(deltaKcalFat){
+  // dodatnie => trzeba dodać kcal z tłuszczu
+  const g = deltaKcalFat / KCAL_PER_G_OLIWA;
+  return Math.max(0, Math.round(g/5)*5);
+}
+
+function gramsForMacroFromFood(foodKey, macro, targetDeltaKcal){
+  const nd = NUTRI[foodKey]; if(!nd) return 0;
+  const per100 =
+    (macro==='P'? nd.p*4 : macro==='F'? nd.f*9 : nd.c*4);
+  const perGram = per100/100;
+  if(perGram<=0) return 0;
+  return Math.max(0, Math.round((targetDeltaKcal/perGram)/5)*5);
+}
+
+function updateMacroStatus(card, dayP, dayF, dayC){
+  const pill = card.querySelector('.pill.macro');
+  const box  = card.querySelector('.macro-status');
+  if(!pill || !box) return;
+
+  const pK = dayP*4, fK = dayF*9, cK = dayC*4;
+  const tot = pK + fK + cK || 1;
+  const pctP = Math.round((pK/tot)*100);
+  const pctF = Math.round((fK/tot)*100);
+  const pctC = Math.round((cK/tot)*100);
+
+  pill.classList.remove('ok','warn','err');
+  const off = Math.max(
+    Math.abs(pctP - TARGETS.P*100),
+    Math.abs(pctF - TARGETS.F*100),
+    Math.abs(pctC - TARGETS.C*100)
+  );
+  if(off <= TOL_PCT_PT) pill.classList.add('ok');
+  else if(off <= TOL_PCT_PT*2) pill.classList.add('warn');
+  else pill.classList.add('err');
+
+  // bardziej sensowne podpowiedzi
+  const needFatKcal  = Math.max(0, TARGETS.F*TARGET_KCAL - fK);
+  const needCarbKcal = Math.max(0, TARGETS.C*TARGET_KCAL - cK);
+  const needProtKcal = Math.max(0, TARGETS.P*TARGET_KCAL - pK);
+
+  const tips = [];
+  if(needFatKcal){
+    const gNuts = gramsForMacroFromFood('orzechy_wloskie','F', needFatKcal);
+    tips.push((gNuts||10) + ' g orzechów');
+  }
+  if(needCarbKcal){
+    const gZboze = gramsForMacroFromFood('ryz_basmati_suchy','C', needCarbKcal);
+    tips.push((gZboze||20) + ' g ryżu (suchy)');
+  }
+  if(needProtKcal){
+    const gTwr = gramsForMacroFromFood('twarog','P', needProtKcal);
+    tips.push((gTwr||50) + ' g twarogu');
+  }
+
+  box.textContent = pctF + '% T • ' + pctC + '% W • ' + pctP + '% B' + (tips.length ? ' • dodaj: ' + tips.join(', ') : '');
+}
+
+function updateKcalStatus(card, dayK){
+  const badge = card.querySelector('.kcal-status');
+  const pill  = card.querySelector('.pill.kcal');
+  if(!badge || !pill) return;
+  const diff = Math.round(dayK - TARGET_KCAL); // dodatni = nadwyżka
+  pill.classList.remove('ok','warn','err');
+
+  if(Math.abs(diff) <= TOLERANCE_KCAL){
+    badge.textContent = 'jest OK (≈ ' + Math.round(dayK) + ' kcal)';
+    pill.classList.add('ok');
+  }else if(diff < 0){
+    const g = gramsOfOliveFor(-diff);
+    badge.textContent = 'brakuje ' + (-diff) + ' kcal • dodaj ~' + g + ' g oliwy';
+    pill.classList.add('warn');
+  }else{
+    const g = gramsOfOliveFor(diff);
+    badge.textContent = 'nadwyżka ' + diff + ' kcal • ujmij ~' + g + ' g oliwy';
+    pill.classList.add('err');
+  }
+}
+
+// Usuwa wcześniejszą korektę oliwy w dniu (żeby nie dublować przy ponownym kliknięciu)
+function _removeOilCorrection(dayMeals){
+  ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
+    if(!dayMeals[sec]) return;
+    dayMeals[sec] = dayMeals[sec].filter(x => x._autoOil !== true);
+  });
+}
+
+// Liczy kcal dnia według obecnych pozycji
+function _calcDayKcal(dayMeals){
+  let K=0;
+  Object.values(dayMeals).forEach(items=>{
+    (items||[]).forEach(it=>{
+      const d = computeItem(it.k, it.g);
+      if(d) K += d.kcal;
+    });
+  });
+  return K;
+}
+
+// Dodaje do kolacji oliwę, żeby dobić do 2800 (zaokr. do 5 g)
+function _addOilToReachTarget(dayMeals){
+  const current = _calcDayKcal(dayMeals);
+  const need = Math.max(0, TARGET_KCAL - current);
+  const g = Math.max(0, Math.round((need/9)/5)*5); // 9 kcal/g, zaokrąglenie do 5 g
+  if(g > 0){
+    (dayMeals.kolacja ||= []).push({ k:'oliwa', g, l:'Korekta: oliwa do celu', _autoOil:true });
+  }
+}
+
+// Główna funkcja – przeleci po wszystkich dniach i doda korektę
+function autoTopUpAllDays(){
+  Object.values(PLAN).forEach(week=>{
+    week.days.forEach(d=>{
+      if(d.shopping) return;
+      _removeOilCorrection(d.meals);
+      _addOilToReachTarget(d.meals);
+    });
+  });
+}
+// znacznik korekt
+function _removeAutoCorrections(dayMeals){
+  ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
+    if(!dayMeals[sec]) return;
+    dayMeals[sec] = dayMeals[sec].filter(x => !x._autoCorr);
+  });
+}
+function _calcDayKcal(dayMeals){
+  let K=0;
+  Object.values(dayMeals).forEach(items=>{
+    (items||[]).forEach(it=>{
+      const d = computeItem(it.k, it.g);
+      if(d) K += d.kcal;
+    });
+  });
+  return K;
+}
+function _calcDayMacros(dayMeals){
+  let P=0,F=0,C=0;
+  Object.values(dayMeals).forEach(items=>{
+    (items||[]).forEach(it=>{
+      const d = computeItem(it.k, it.g);
+      if(d){ P+=d.p; F+=d.f; C+=d.c; }
+    });
+  });
+  return {P,F,C};
+}
+
+// preferencje dobiegania makro
+const TOPUP_PREF = {
+  FAT:   { food:'orzechy_wloskie', sec:['drugie','kolacja'] },
+  CARB:  { food:'ryz_basmati_suchy', sec:['obiad'] },
+  PROT:  { food:'twarog', sec:['kolacja','drugie'] },
+  OIL:   { food:'oliwa', sec:['kolacja'] }
+};
+
+function _pushCorrection(dayMeals, sec, k, g, label){
+  (dayMeals[sec] ||= []).push({ k, g, l:label, _autoCorr:true });
+}
+
+function _smartTopUpDay(dayMeals){
+  _removeAutoCorrections(dayMeals);
+
+  // 1) Deficyt kcal ogółem
+  const curK = _calcDayKcal(dayMeals);
+  let needK = Math.max(0, TARGET_KCAL - curK);
+
+  // 2) Deficyty makro względem celu (w kcal)
+  const {P,F,C} = _calcDayMacros(dayMeals);
+  const pK = P*4, fK = F*9, cK = C*4;
+
+  let defF = Math.max(0, TARGETS.F*TARGET_KCAL - fK);
+  let defC = Math.max(0, TARGETS.C*TARGET_KCAL - cK);
+  let defP = Math.max(0, TARGETS.P*TARGET_KCAL - pK);
+
+  // 3) Najpierw makra z normalnych produktów
+  if(defF > 0){
+    const g = gramsForMacroFromFood(TOPUP_PREF.FAT.food,'F', defF);
+    if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.FAT.sec[0], TOPUP_PREF.FAT.food, g, 'Korekta: orzechy'); needK-=g*(NUTRI.orzechy_wloskie.f*9/100); }
+  }
+  if(defC > 0){
+    const g = gramsForMacroFromFood(TOPUP_PREF.CARB.food,'C', defC);
+    if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.CARB.sec[0], TOPUP_PREF.CARB.food, g, 'Korekta: ryż (suchy)'); needK-=g*(NUTRI.ryz_basmati_suchy.c*4/100); }
+  }
+  if(defP > 0){
+    const g = gramsForMacroFromFood(TOPUP_PREF.PROT.food,'P', defP);
+    if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.PROT.sec[0], TOPUP_PREF.PROT.food, g, 'Korekta: twaróg'); needK-=g*(NUTRI.twarog.p*4/100); }
+  }
+
+  // 4) Jeśli nadal brakuje kcal – dosyp zboża + „przekąska” (masło orzechowe / banan)
+  if(needK > 60){
+    const gZ = gramsForMacroFromFood('kuskus_suchy','C', Math.min(needK, 200));
+    if(gZ>0){ _pushCorrection(dayMeals, 'obiad', 'kuskus_suchy', gZ, 'Korekta: kuskus'); needK -= gZ*(NUTRI.kuskus_suchy.c*4/100); }
+  }
+  if(needK > 60){
+    const gPB = Math.max(0, Math.round((Math.min(needK, 180)/9)/5)*5); // masło orzechowe ~50% tł
+    if(gPB>0){ _pushCorrection(dayMeals, 'drugie', 'maslo_orzechowe', Math.min(gPB, 30), 'Korekta: masło orzechowe'); needK -= Math.min(gPB,30)* (NUTRI.maslo_orzechowe.kcal/100); }
+  }
+  if(needK > 60){
+    const gBan = Math.min(needK/0.89, 150); // banan ~0.89 kcal/g
+    const gR = Math.max(0, Math.round(gBan/10)*10);
+    if(gR>0){ _pushCorrection(dayMeals, 'jogurt', 'banan', gR, 'Dodatek: banan do jogurtu'); needK -= gR*0.89; }
+  }
+
+  // 5) Absolutny „szlif” oliwą – mały i z limitem
+  if(needK > 0){
+    const gOil = Math.min(MAX_OIL_CORR_G, Math.max(0, Math.round((needK/9)/5)*5));
+    if(gOil>0){ _pushCorrection(dayMeals, TOPUP_PREF.OIL.sec[0], 'oliwa', gOil, 'Szlif: oliwa'); }
+  }
+}
+
+function autoTopUpAllDays(){
+  Object.values(PLAN).forEach(week=>{
+    week.days.forEach(d=>{
+      if(d.shopping) return;
+      _smartTopUpDay(d.meals);
+    });
+  });
+}
+/* ============ RENDER TYGODNI ============ */
+function renderWeeks(){
+  const tabsEl = document.getElementById('weekTabs');
+  const weeksRoot = document.getElementById('weeksRoot');
+  tabsEl.innerHTML = '';
+  weeksRoot.innerHTML = '';
+
+  Object.keys(PLAN).forEach((wk,i)=>{
+    const tab = document.createElement('div');
+    tab.className='tab'+(i===0?' active':'');
+    tab.dataset.week = wk;
+    tab.setAttribute('role','button');
+    tab.setAttribute('tabindex','0');
+    tab.textContent = PLAN[wk].title;
+    tabsEl.appendChild(tab);
+
+    const panel = document.createElement('div');
+    panel.className='panel'+(i===0?' active':'');
+    panel.dataset.week = wk;
+
+    // Subtabs
+    const subt = document.createElement('div');
+    subt.className='subtabs';
+    PLAN[wk].days.forEach((d,j)=>{
+      const st = document.createElement('div');
+      st.className='subtab'+(j===0?' active':'');
+      st.dataset.day = d.day;
+      st.setAttribute('role','button'); st.setAttribute('tabindex','0');
+      st.textContent = d.shopping ? '🛒 Zakupy' : d.day;
+      subt.appendChild(st);
+    });
+    panel.appendChild(subt);
+
+    // Day cards
+    PLAN[wk].days.forEach((d,j)=>{
+      const html = renderDayTable(d, wk, j);
+      const wrap = document.createElement('div');
+      wrap.innerHTML = html;
+      panel.appendChild(wrap.firstElementChild);
+    });
+
+    weeksRoot.appendChild(panel);
+  });
+}
+
+/* ============ TABY / SUBTABY / NAWIGACJA ============ */
+function activateTabs(){
+  // week tabs
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector('.panel[data-week="' + tab.dataset.week + '"]').classList.add('active');
+      syncPrintContext();
+      drawAllCharts();
+    });
+  });
+
+  // subtabs
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const subs = panel.querySelectorAll('.subtab');
+    const cards = panel.querySelectorAll('.daycard');
+    subs.forEach(st=>{
+      st.addEventListener('click', ()=>{
+        subs.forEach(x=>x.classList.remove('active'));
+        st.classList.add('active');
+        cards.forEach(c=>c.classList.remove('active'));
+        const day = st.dataset.day;
+        const activeCard = panel.querySelector('.daycard[data-day="' + day + '"]');
+        if(activeCard){ activeCard.classList.add('active'); }
+        syncPrintContext();
+        drawAllCharts();
+      });
+    });
+    // aktywuj pierwszy dzien
+    const first = subs[0];
+    if(first){ first.click(); }
+  });
+
+  // strzałki "poprzedni/następny dzień"
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const subs = [...panel.querySelectorAll('.subtab')];
+    panel.querySelectorAll('.btn.btn-prev').forEach(b=>b.addEventListener('click',()=>{
+      const idx = subs.findIndex(s=>s.classList.contains('active'));
+      if(idx>0) subs[idx-1].click();
+    }));
+    panel.querySelectorAll('.btn.btn-next').forEach(b=>b.addEventListener('click',()=>{
+      const idx = subs.findIndex(s=>s.classList.contains('active'));
+      if(idx<subs.length-1) subs[idx+1].click();
+    }));
+  });
+}
+
+/* ============ FILTR POSIŁKÓW (globalny) ============ */
+function applyMealFilter(){
+  const val = document.getElementById('mealFilter').value;
+  document.querySelectorAll('.daycard').forEach(card=>{
+    card.querySelectorAll('tr[data-sec], .tr-sec').forEach(row=>{
+      const sec = row.getAttribute('data-sec');
+      row.style.display = (val==='all' || val===sec) ? '' : 'none';
+    });
+  });
+}
+
+/* ============ SUMY / KOSZTY / CHECKLISTY ============ */
+const CHK_KEY = 'emil_checklist_v1';
+function loadChecklist(){ try{ return JSON.parse(localStorage.getItem(CHK_KEY)||'{}') }catch(e){ return {} } }
+function saveChecklist(map){ localStorage.setItem(CHK_KEY, JSON.stringify(map)); }
+function wireChecklist(){
+  const state = loadChecklist();
+  document.querySelectorAll('.checklist input[type="checkbox"]').forEach(cb=>{
+    const id = cb.getAttribute('data-id');
+    cb.checked = !!state[id];
+    cb.addEventListener('change', ()=>{
+      const s = loadChecklist();
+      if(cb.checked) s[id]=true; else delete s[id];
+      saveChecklist(s);
+    });
+  });
+}
+
+function recalcCostsAndSums(){
+  const prices = loadPrices();
+
+  document.querySelectorAll('.daycard').forEach(card=>{
+    let dayCost=0, dayK=0, dayP=0, dayF=0, dayC=0;
+
+    // ceny w wierszach
+    card.querySelectorAll('.row-price').forEach(sp=>{
+      const k = sp.getAttribute('data-k');
+      const g = parseFloat(sp.getAttribute('data-g'))||0;
+      const cost = priceFor(k,g,prices);
+      sp.textContent = fmt(cost) + ' zł';
+    });
+
+    // sumy posiłków
+    ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
+      let K=0,P=0,F=0,C=0,cost=0;
+      card.querySelectorAll('tr[data-sec="' + sec + '"]').forEach(tr=>{
+        const kcal = parseFloat((tr.querySelector('.kcal') && tr.querySelector('.kcal').textContent) || 0);
+        const p = parseFloat((tr.querySelector('.p') && tr.querySelector('.p').textContent) || 0);
+        const f = parseFloat((tr.querySelector('.f') && tr.querySelector('.f').textContent) || 0);
+        const c = parseFloat((tr.querySelector('.c') && tr.querySelector('.c').textContent) || 0);
+        const rp = (tr.querySelector('.row-price') && tr.querySelector('.row-price').textContent) || '0';
+        const czl = parseFloat((rp.match(/[\d.]+/)||['0'])[0])||0;
+        K+=kcal; P+=p; F+=f; C+=c; cost+=czl;
+      });
+      const sumRow = card.querySelector('.sum-row[data-sum="' + sec + '"]');
+      if(sumRow){
+        sumRow.querySelector('.sum-kcal').textContent = Math.round(K);
+        sumRow.querySelector('.sum-p').textContent = P.toFixed(1);
+        sumRow.querySelector('.sum-f').textContent = F.toFixed(1);
+        sumRow.querySelector('.sum-c').textContent = C.toFixed(1);
+        const pK=P*4, fK=F*9, cK=C*4, tot=pK+fK+cK;
+        sumRow.querySelector('.sum-pctp').textContent = (tot?Math.round(pK/tot*100):0)+'%';
+        sumRow.querySelector('.sum-pctf').textContent = (tot?Math.round(fK/tot*100):0)+'%';
+        sumRow.querySelector('.sum-pctc').textContent = (tot?Math.round(cK/tot*100):0)+'%';
+        sumRow.querySelector('.sum-cost').textContent = fmt(cost) + ' zł';
+      }
+      dayK+=K; dayP+=P; dayF+=F; dayC+=C; dayCost+=cost;
+    });
+
+    const dayRow = card.querySelector('.sum-row[data-sum="day"]');
+    if(dayRow){
+      dayRow.querySelector('.day-kcal').textContent = Math.round(dayK);
+      dayRow.querySelector('.day-p').textContent = dayP.toFixed(1);
+      dayRow.querySelector('.day-f').textContent = dayF.toFixed(1);
+      dayRow.querySelector('.day-c').textContent = dayC.toFixed(1);
+      const pK=dayP*4, fK=dayF*9, cK=dayC*4, tot=pK+fK+cK;
+      dayRow.querySelector('.day-pctp').textContent = (tot?Math.round(pK/tot*100):0)+'%';
+      dayRow.querySelector('.day-pctf').textContent = (tot?Math.round(fK/tot*100):0)+'%';
+      dayRow.querySelector('.day-pctc').textContent = (tot?Math.round(cK/tot*100):0)+'%';
+      dayRow.querySelector('.day-cost').textContent = fmt(dayCost) + ' zł';
+    }
+    const pill = card.querySelector('.pill-cost');
+    if(pill) pill.textContent = fmt(dayCost) + ' zł';
+
+    // aktualizuj statusy i wykresy dla tej karty
+    updateKcalStatus(card, dayK);
+    updateMacroStatus(card, dayP, dayF, dayC);
+  });
+}
+
+/* ============ WYKRES KOŁOWY (vanilla canvas) ============ */
+function drawPie(canvas, vals){
+  const ctx = canvas.getContext('2d');
+  const total = vals.reduce((a,b)=>a+b,0) || 1;
+  const colors = ['#60a5fa','#34d399','#fbbf24']; // P, F, C
+  let start= -Math.PI/2;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const cx=canvas.width/2, cy=canvas.height/2, r=Math.min(cx,cy)-4;
+  vals.forEach((v,i)=>{
+    const ang = (v/total)*Math.PI*2;
+    ctx.beginPath(); ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,start+ang); ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length]; ctx.fill();
+    start+=ang;
+  });
+  // biały środek
+  ctx.beginPath(); ctx.arc(cx,cy,r*0.5,0,Math.PI*2); ctx.fillStyle='white'; ctx.fill();
+  // obwódka
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.strokeStyle='rgba(0,0,0,.15)'; ctx.stroke();
+}
+function drawAllCharts(){
+  document.querySelectorAll('.daycard').forEach(card=>{
+    const row = card.querySelector('.sum-row[data-sum="day"]');
+    if(!row) return;
+    const P = parseFloat(row.querySelector('.day-p')?.textContent||0)*4;
+    const F = parseFloat(row.querySelector('.day-f')?.textContent||0)*9;
+    const C = parseFloat(row.querySelector('.day-c')?.textContent||0)*4;
+    const canvas = card.querySelector('canvas');
+    if(canvas) drawPie(canvas, [P,F,C]);
+  });
+}
+
+/* ============ ZAKUPY – agregacja tygodniowa ============ */
+function buildShoppingForWeek(weekKey){
+  const prices = loadPrices();
+  const map = {}; // {ingKey: grams}
+  const week = PLAN[weekKey];
+  if(!week) return {list:[], total:0};
+
+  week.days.forEach(d=>{
+    if(d.shopping) return;
+    Object.values(d.meals).forEach(items=>{
+      (items||[]).forEach(it=>{
+        map[it.k] = (map[it.k]||0) + it.g;
+      });
+    });
+  });
+
+  const list = Object.entries(map).map(([k,g])=>{
+    const cost = priceFor(k,g,prices);
+    const brand = NUTRI[k]?.brand || '-';
+    const label = k.replaceAll('_',' ');
+    return {k,label,brand,g,cost};
+  }).sort((a,b)=> a.label.localeCompare(b.label,'pl'));
+
+  const total = list.reduce((s,x)=>s+x.cost,0);
+  return {list,total};
+}
+function renderShoppingBar(){
+  const wrap = document.getElementById('shoppingWeeks');
+  const out = document.getElementById('shoppingListWrap');
+  wrap.innerHTML='';
+  out.innerHTML='<div class="small">Wybierz tydzień, aby zobaczyć szczegóły…</div>';
+  Object.keys(PLAN).forEach(wk=>{
+    const b = document.createElement('button');
+    b.className='btn';
+    b.textContent = PLAN[wk].title;
+    b.addEventListener('click', ()=>{
+      const {list,total} = buildShoppingForWeek(wk);
+      const rows = list.map(function(it){
+        return '<tr><td>' + it.label + '</td><td>' + it.brand + '</td><td style="text-align:right">' + it.g + '</td><td style="text-align:right">' + fmt(it.cost) + ' zł</td></tr>';
+      }).join('');
+      out.innerHTML = '<div class="scroll">' +
+        '<table class="table">' +
+          '<thead class="thead"><tr><th>Produkt</th><th>Marka</th><th>Gramatura (g)</th><th>Koszt</th></tr></thead>' +
+          '<tbody>' + rows + '</tbody>' +
+          '<tfoot><tr class="sum-row"><td colspan="3" style="text-align:right"><b>Razem</b></td><td><b>' + fmt(total) + ' zł</b></td></tr></tfoot>' +
+        '</table>' +
+      '</div>';
+    });
+    wrap.appendChild(b);
+  });
+}
+/* ============ ZAKUPY – podpowiedź opakowań i kategorie ============ */
+function packHint(ingKey, grams){
+  const nd = NUTRI[ingKey] || {};
+  // sztuki (jajka/awokado)
+  if(nd.pricePerUnit && nd.unit === 'szt'){
+    const unitG = nd.unitGram || 1;
+    const pcs = Math.ceil(grams / unitG);
+    return pcs + ' × szt. (~' + Math.round(grams) + ' g)';
+  }
+  // znane opakowanie (np. hummus 180 g, jogurt 200 g, mix 450 g)
+  if(nd.packed){
+    const packs = Math.ceil(grams / nd.packed);
+    const left = grams % nd.packed;
+    return packs + ' × ' + nd.packed + ' g' + (left ? ' (ok. ' + Math.round(grams) + ' g)' : '');
+  }
+  // oliwa (zł/l) – liczymy jak kg
+  if(nd.priceKey === 'oliwa_extra_vergine_l_1'){
+    const ml = grams; // traktujemy 1 ml ~= 1 g do koszyka
+    if(ml >= 1000){ 
+      const b = (ml/1000).toFixed(2);
+      return '~' + b + ' l (wg potrzeb)';
+    }
+    return '~' + ml + ' ml (wg potrzeb)';
+  }
+  // domyślnie produkty „na wagę”
+  if(grams >= 1000){
+    return '~' + (grams/1000).toFixed(2) + ' kg';
+  }
+  return '~' + Math.round(grams) + ' g';
+}
+
+function categorize(ingKey){
+  const map = {
+    bialko:['dorsz','mintaj','losos','indyk','kurczak','jajko','twarog','feta','jogurt2','hummus'],
+    zboza:['chleb_zytni','platki_owsiane','kasza_gryczana_sucha','ryz_basmati_suchy','kuskus_suchy'],
+    tluszcze:['oliwa','orzechy_wloskie','migdaly','pestki_dyni','awokado','feta'],
+    warzywa:['papryka','ogorek','pomidor','cebula','marchew','mix_mroz','brokul','kalafior'],
+    inne:[/* fallback */]
+  };
+  for(const [cat,arr] of Object.entries(map)){
+    if(arr.includes(ingKey)) return cat;
+  }
+  return 'inne';
+}
+
+/* ============ ZAKUPY – widok w każdym tygodniu (rozsuwane <details>) ============ */
+function renderInlineWeekShopping(){
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const wk = panel.dataset.week;
+    if(!wk || !PLAN[wk]) return;
+
+    // jeżeli już istnieje – odśwież
+    let holder = panel.querySelector('.week-shopping-card');
+    if(!holder){
+      holder = document.createElement('div');
+      holder.className = 'card week-shopping-card';
+      holder.innerHTML = '<h2>🧾 Zakupy – ' + PLAN[wk].title + '</h2>' +
+        '<div class="scroll"></div>';
+      panel.appendChild(holder);
+    }
+    const target = holder.querySelector('.scroll');
+
+    const {list,total} = buildShoppingForWeek(wk);
+
+    // grupowanie po kategoriach
+    const byCat = {};
+    list.forEach(it=>{
+      const cat = categorize(it.k);
+      (byCat[cat] ||= []).push(it);
+    });
+
+    const catLabel = {
+      bialko:'Białka / nabiał / strączki',
+      zboza:'Pieczywo / zboża / kasze',
+      tluszcze:'Tłuszcze / orzechy / pestki',
+      warzywa:'Warzywa / mrożonki',
+      inne:'Inne'
+    };
+
+    // budowa sekcji per kategoria (collapsible)
+    let html = '';
+    Object.keys(catLabel).forEach(cat=>{
+      const rows = (byCat[cat]||[]).map(function(it){
+        const hint = packHint(it.k, it.g);
+        return '<tr>' +
+          '<td>' + it.label + '</td>' +
+          '<td>' + ((NUTRI[it.k] && NUTRI[it.k].brand) || '-') + '</td>' +
+          '<td style="text-align:right">' + Math.round(it.g) + '</td>' +
+          '<td style="text-align:right">' + hint + '</td>' +
+          '<td style="text-align:right">' + fmt(it.cost) + ' zł</td>' +
+        '</tr>';
+      }).join('');
+      if(!rows) return;
+      html += '<details open>' +
+          '<summary style="padding:8px 12px;font-weight:700;cursor:pointer">' + catLabel[cat] + '</summary>' +
+          '<div class="scroll" style="margin:0 12px 10px">' +
+            '<table class="table">' +
+              '<thead class="thead">' +
+                '<tr><th>Produkt</th><th>Marka</th><th style="text-align:right">Gramatura (g)</th><th style="text-align:right">Opakowania / waga</th><th style="text-align:right">Koszt</th></tr>' +
+              '</thead>' +
+              '<tbody>' + rows + '</tbody>' +
+            '</table>' +
+          '</div>' +
+        '</details>';
+    });
+
+    html += '<div style="padding:8px 12px;border-top:1px dashed var(--br);display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+        '<span class="pill">💰 Razem: <b>' + fmt(total) + ' zł</b></span>' +
+        '<button class="btn btn-print-week-shop">🖨 Drukuj listę zakupów – ' + PLAN[wk].title + '</button>' +
+      '</div>';
+
+    // lokalny przycisk druku tylko listy zakupów tego tygodnia
+    const btn = holder.querySelector('.btn-print-week-shop');
+    if(btn){
+      btn.addEventListener('click', ()=>{
+        // tymczasowo pokaż tylko tę kartę
+        document.body.classList.add('print-mode-shopping');
+        // chowamy inne tygodniowe karty zakupów, zostawiamy tę:
+        document.querySelectorAll('.week-shopping-card').forEach(el=>{
+          el.style.display = (el === holder) ? '' : 'none';
+        });
+        window.print();
+        document.querySelectorAll('.week-shopping-card').forEach(el=>{ el.style.display=''; });
+        document.body.classList.remove('print-mode-shopping');
+      });
+    }
+  });
+}
+/* ============ DRUK ============ */
+function syncPrintContext(){
+  document.body.classList.remove('print-mode-day','print-mode-week','print-mode-shopping');
+}
+function setupPrintButtons(){
+  document.getElementById('autoKcal').addEventListener('click', ()=>{
+  autoTopUpAllDays();
+  renderAll(); // przerysuj cały widok z nowymi gramaturami
+});
+  const pDay  = document.getElementById('pDay');
+  const pWeek = document.getElementById('pWeek');
+  const pShop = document.getElementById('pShop');
+  const pAll  = document.getElementById('pAll');
+
+  pDay.addEventListener('click', ()=>{
+    document.body.classList.add('print-mode-day');
+    window.print();
+    document.body.classList.remove('print-mode-day');
+  });
+  pWeek.addEventListener('click', ()=>{
+    document.body.classList.add('print-mode-week');
+    window.print();
+    document.body.classList.remove('print-mode-week');
+  });
+  pShop.addEventListener('click', ()=>{
+    document.body.classList.add('print-mode-shopping');
+    window.print();
+    document.body.classList.remove('print-mode-shopping');
+  });
+  pAll.addEventListener('click', ()=>{
+    syncPrintContext(); window.print();
+  });
+}
+
+/* ============ MOTYW CIEMNY ============ */
+function _toggleDark(){
+  const root = document.documentElement;
+  const isDark = root.classList.toggle('dark');
+  try{ localStorage.setItem('emil_dark', isDark?'1':'0'); }catch(e){}
+}
+(function(){
+  try{
+    if(localStorage.getItem('emil_dark')==='1'){
+      document.documentElement.classList.add('dark');
+    }
+  }catch(e){}
+})();
+
+/* ============ RENDER CAŁOŚCI ============ */
+function renderAll(){
+  renderWeeks();
+  activateTabs();
+  applyMealFilter();
+  // przelicz sumy, narysuj wykresy, podłącz checklistę i widoki zakupów, oraz mobilne udogodnienia
+  recalcCostsAndSums();
+  drawAllCharts();
+  wireChecklist();
+  renderShoppingBar();
+  renderInlineWeekShopping();
+  _wireScrollShadows();
+  _centerActiveSubtab();
+}
+
+/* ============ INIT ============ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Schowaj cennik na małych ekranach
+if (window.matchMedia('(max-width: 560px)').matches) {
+  document.getElementById('priceDetails')?.removeAttribute('open');
+}
+  // załaduj ceny do tabeli (z localStorage)
+  const saved = loadPrices();
+  // jeżeli coś się różni – nadpisz widok
+  document.querySelectorAll('#priceTable tbody tr').forEach(tr=>{
+    const key = tr.getAttribute('data-key');
+    const td = tr.querySelector('.pval');
+    if(key in saved) td.textContent = String(saved[key]);
+  });
+
+  renderAll();
+  setupPrintButtons();
+  document.getElementById('mealFilter').addEventListener('change', applyMealFilter);
+});
+// ======= Mobilne udogodnienia =======
+function _toggleScrollShadows(){
+  document.querySelectorAll('.scroll').forEach(el=>{
+    const max = el.scrollWidth - el.clientWidth - 1;
+    el.classList.toggle('show-left', el.scrollLeft>0);
+    el.classList.toggle('show-right', el.scrollLeft<max);
+  });
+}
+function _wireScrollShadows(){
+  document.querySelectorAll('.scroll').forEach(el=>{
+    el.addEventListener('scroll', _toggleScrollShadows, {passive:true});
+  });
+  window.addEventListener('resize', _toggleScrollShadows);
+  _toggleScrollShadows();
+}
+
+// aktywne „dni” przewijają się w obrębie paska subtabs
+function _centerActiveSubtab(){
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const bar = panel.querySelector('.subtabs');
+    const active = panel.querySelector('.subtab.active');
+    if(!bar || !active) return;
+    const aRect = active.getBoundingClientRect();
+    const bRect = bar.getBoundingClientRect();
+    const delta = (aRect.left + aRect.width/2) - (bRect.left + bRect.width/2);
+    bar.scrollBy({left: delta, behavior:'smooth'});
+  });
+}
+</script>
+</body>
+</html>
