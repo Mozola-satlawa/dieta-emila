@@ -620,15 +620,6 @@ function gramsOfOliveFor(deltaKcalFat){
   return Math.max(0, Math.round(g/5)*5);
 }
 
-function gramsForMacroFromFood(foodKey, macro, targetDeltaKcal){
-  const nd = NUTRI[foodKey]; if(!nd) return 0;
-  const per100 =
-    (macro==='P'? nd.p*4 : macro==='F'? nd.f*9 : nd.c*4);
-  const perGram = per100/100;
-  if(perGram<=0) return 0;
-  return Math.max(0, Math.round((targetDeltaKcal/perGram)/5)*5);
-}
-
 function updateMacroStatus(card, dayP, dayF, dayC){
   const pill = card.querySelector('.pill.macro');
   const box  = card.querySelector('.macro-status');
@@ -760,7 +751,13 @@ function _calcDayMacros(dayMeals){
   });
   return {P,F,C};
 }
-
+// preferencje dobiegania makro
+const TOPUP_PREF = {
+  FAT:   { food:'orzechy_wloskie', sec:['drugie','kolacja'] },
+  CARB:  { food:'ryz_basmati_suchy', sec:['obiad'] },
+  PROT:  { food:'twarog', sec:['kolacja','drugie'] },
+  OIL:   { food:'oliwa', sec:['kolacja'] }
+};
 // sensowne limity jednorazowych „dobić” (g)
 const LIMITS = {
   orzechy_wloskie: 30,
@@ -872,7 +869,9 @@ function renderWeeks(){
   const weeksRoot = document.getElementById('weeksRoot');
   tabsEl.innerHTML = '';
   weeksRoot.innerHTML = '';
-
+renderWeeks();
+renderInlineWeekShopping(); // <— to dodaj
+activateTabs();
   Object.keys(PLAN).forEach((wk,i)=>{
     const tab = document.createElement('div');
     tab.className='tab'+(i===0?' active':'');
@@ -1231,63 +1230,60 @@ function renderInlineWeekShopping(){
       (byCat[cat] ||= []).push(it);
     });
 
-    const catLabel = {
-      bialko:'Białka / nabiał / strączki',
-      zboza:'Pieczywo / zboża / kasze',
-      tluszcze:'Tłuszcze / orzechy / pestki',
-      warzywa:'Warzywa / mrożonki',
-      inne:'Inne'
-    };
+   const catLabel = {
+  bialko:'Białka / nabiał / strączki',
+  zboza:'Pieczywo / zboża / kasze',
+  tluszcze:'Tłuszcze / orzechy / pestki',
+  warzywa:'Warzywa / mrożonki',
+  inne:'Inne'
+};
 
-    // budowa sekcji per kategoria (collapsible)
-    let html = '';
-    Object.keys(catLabel).forEach(cat=>{
-      const rows = (byCat[cat]||[]).map(function(it){
-        const hint = packHint(it.k, it.g);
-        return '<tr>' +
-          '<td>' + it.label + '</td>' +
-          '<td>' + ((NUTRI[it.k] && NUTRI[it.k].brand) || '-') + '</td>' +
-          '<td style="text-align:right">' + Math.round(it.g) + '</td>' +
-          '<td style="text-align:right">' + hint + '</td>' +
-          '<td style="text-align:right">' + fmt(it.cost) + ' zł</td>' +
-        '</tr>';
-      }).join('');
-      if(!rows) return;
-      html += '<details open>' +
-          '<summary style="padding:8px 12px;font-weight:700;cursor:pointer">' + catLabel[cat] + '</summary>' +
-          '<div class="scroll" style="margin:0 12px 10px">' +
-            '<table class="table">' +
-              '<thead class="thead">' +
-                '<tr><th>Produkt</th><th>Marka</th><th style="text-align:right">Gramatura (g)</th><th style="text-align:right">Opakowania / waga</th><th style="text-align:right">Koszt</th></tr>' +
-              '</thead>' +
-              '<tbody>' + rows + '</tbody>' +
-            '</table>' +
-          '</div>' +
-        '</details>';
-    });
+// budowa sekcji per kategoria (collapsible)
+let html = '';
+Object.keys(catLabel).forEach(cat=>{
+  const items = byCat[cat] || [];
+  if(!items.length) return;
+  const rows = items.map(it=>{
+    const hint = packHint(it.k, it.g);
+    return `
+      <tr>
+        <td>${it.label}</td>
+        <td>${(NUTRI[it.k]?.brand)||'-'}</td>
+        <td style="text-align:right">${Math.round(it.g)}</td>
+        <td style="text-align:right">${hint}</td>
+        <td style="text-align:right">${fmt(it.cost)} zł</td>
+      </tr>`;
+  }).join('');
+  html += `
+    <details open>
+      <summary style="padding:8px 12px;font-weight:700;cursor:pointer">${catLabel[cat]}</summary>
+      <div class="scroll" style="margin:0 12px 10px">
+        <table class="table">
+          <thead class="thead">
+            <tr>
+              <th>Produkt</th><th>Marka</th>
+              <th style="text-align:right">Gramatura (g)</th>
+              <th style="text-align:right">Opakowania / waga</th>
+              <th style="text-align:right">Koszt</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    </details>`;
+});
 
-    html += '<div style="padding:8px 12px;border-top:1px dashed var(--br);display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
-        '<span class="pill">💰 Razem: <b>' + fmt(total) + ' zł</b></span>' +
-        '<button class="btn btn-print-week-shop">🖨 Drukuj listę zakupów – ' + PLAN[wk].title + '</button>' +
-      '</div>';
+html += `
+  <div style="padding:8px 12px;border-top:1px dashed var(--br);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <span class="pill">💰 Razem: <b>${fmt(total)} zł</b></span>
+  </div>`;
 
-    // lokalny przycisk druku tylko listy zakupów tego tygodnia
-    const btn = holder.querySelector('.btn-print-week-shop');
-    if(btn){
-      btn.addEventListener('click', ()=>{
-        // tymczasowo pokaż tylko tę kartę
-        document.body.classList.add('print-mode-shopping');
-        // chowamy inne tygodniowe karty zakupów, zostawiamy tę:
-        document.querySelectorAll('.week-shopping-card').forEach(el=>{
-          el.style.display = (el === holder) ? '' : 'none';
-        });
-        window.print();
-        document.querySelectorAll('.week-shopping-card').forEach(el=>{ el.style.display=''; });
-        document.body.classList.remove('print-mode-shopping');
-      });
-    }
+target.innerHTML = html;
   });
 }
+
+// lokalny przycisk druku tylko listy zakupów tego tygodnia
+// (usunięty / przeniesiony) — nie ma już bloków poza funkcją renderInlineWeekShopping
 /* ============ DRUK ============ */
 function syncPrintContext(){
   document.body.classList.remove('print-mode-day','print-mode-week','print-mode-shopping');
