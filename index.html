@@ -683,37 +683,6 @@ function updateKcalStatus(card, dayK){
     pill.classList.add('err');
   }
 }
-
-// Usuwa wcześniejszą korektę oliwy w dniu (żeby nie dublować przy ponownym kliknięciu)
-function _removeOilCorrection(dayMeals){
-  ['sniadanie','drugie','obiad','kolacja','jogurt'].forEach(sec=>{
-    if(!dayMeals[sec]) return;
-    dayMeals[sec] = dayMeals[sec].filter(x => x._autoOil !== true);
-  });
-}
-
-// Liczy kcal dnia według obecnych pozycji
-function _calcDayKcal(dayMeals){
-  let K=0;
-  Object.values(dayMeals).forEach(items=>{
-    (items||[]).forEach(it=>{
-      const d = computeItem(it.k, it.g);
-      if(d) K += d.kcal;
-    });
-  });
-  return K;
-}
-
-// Dodaje do kolacji oliwę, żeby dobić do 2800 (zaokr. do 5 g)
-function _addOilToReachTarget(dayMeals){
-  const current = _calcDayKcal(dayMeals);
-  const need = Math.max(0, TARGET_KCAL - current);
-  const g = Math.max(0, Math.round((need/9)/5)*5); // 9 kcal/g, zaokrąglenie do 5 g
-  if(g > 0){
-    (dayMeals.kolacja ||= []).push({ k:'oliwa', g, l:'Korekta: oliwa do celu', _autoOil:true });
-  }
-}
-
 // Główna funkcja – przeleci po wszystkich dniach i doda korektę
 function autoTopUpAllDays(){
   Object.values(PLAN).forEach(week=>{
@@ -869,9 +838,7 @@ function renderWeeks(){
   const weeksRoot = document.getElementById('weeksRoot');
   tabsEl.innerHTML = '';
   weeksRoot.innerHTML = '';
-renderWeeks();
-renderInlineWeekShopping(); // <— to dodaj
-activateTabs();
+
   Object.keys(PLAN).forEach((wk,i)=>{
     const tab = document.createElement('div');
     tab.className='tab'+(i===0?' active':'');
@@ -909,7 +876,6 @@ activateTabs();
     weeksRoot.appendChild(panel);
   });
 }
-
 /* ============ TABY / SUBTABY / NAWIGACJA ============ */
 function activateTabs(){
   // week tabs
@@ -1132,33 +1098,7 @@ function renderShoppingBar(){
     wrap.appendChild(b);
   });
 }
-function boot(){
-  // 1) jednorazowo wyrównaj dni do celu makro/kcal
-  autoTopUpAllDays();
 
-  // 2) wyrenderuj UI
-  renderWeeks();
-  activateTabs();
-  applyMealFilter();
-  recalcCostsAndSums();
-  wireChecklist();
-  drawAllCharts();
-
-  // 3) podłącz przycisk „⚡ Auto 2800”
-  const btn = document.getElementById('autoKcal');
-  if(btn){
-    btn.addEventListener('click', ()=>{
-      autoTopUpAllDays();
-      renderWeeks();
-      activateTabs();
-      applyMealFilter();
-      recalcCostsAndSums();
-      wireChecklist();
-      drawAllCharts();
-    });
-  }
-}
-document.addEventListener('DOMContentLoaded', boot);
 /* ============ ZAKUPY – podpowiedź opakowań i kategorie ============ */
 function packHint(ingKey, grams){
   const nd = NUTRI[ingKey] || {};
@@ -1210,13 +1150,12 @@ function renderInlineWeekShopping(){
     const wk = panel.dataset.week;
     if(!wk || !PLAN[wk]) return;
 
-    // jeżeli już istnieje – odśwież
+    // upewnij się, że mamy kontener na listę zakupów dla tego panelu
     let holder = panel.querySelector('.week-shopping-card');
     if(!holder){
       holder = document.createElement('div');
       holder.className = 'card week-shopping-card';
-      holder.innerHTML = '<h2>🧾 Zakupy – ' + PLAN[wk].title + '</h2>' +
-        '<div class="scroll"></div>';
+      holder.innerHTML = '<h2>🧾 Zakupy – ' + PLAN[wk].title + '</h2><div class="scroll"></div>';
       panel.appendChild(holder);
     }
     const target = holder.querySelector('.scroll');
@@ -1227,58 +1166,58 @@ function renderInlineWeekShopping(){
     const byCat = {};
     list.forEach(it=>{
       const cat = categorize(it.k);
-      (byCat[cat] ||= []).push(it);
+      (byCat[cat] || (byCat[cat]=[])).push(it);
     });
 
-   const catLabel = {
-  bialko:'Białka / nabiał / strączki',
-  zboza:'Pieczywo / zboża / kasze',
-  tluszcze:'Tłuszcze / orzechy / pestki',
-  warzywa:'Warzywa / mrożonki',
-  inne:'Inne'
-};
+    const catLabel = {
+      bialko:'Białka / nabiał / strączki',
+      zboza:'Pieczywo / zboża / kasze',
+      tluszcze:'Tłuszcze / orzechy / pestki',
+      warzywa:'Warzywa / mrożonki',
+      inne:'Inne'
+    };
 
-// budowa sekcji per kategoria (collapsible)
-let html = '';
-Object.keys(catLabel).forEach(cat=>{
-  const items = byCat[cat] || [];
-  if(!items.length) return;
-  const rows = items.map(it=>{
-    const hint = packHint(it.k, it.g);
-    return `
-      <tr>
-        <td>${it.label}</td>
-        <td>${(NUTRI[it.k]?.brand)||'-'}</td>
-        <td style="text-align:right">${Math.round(it.g)}</td>
-        <td style="text-align:right">${hint}</td>
-        <td style="text-align:right">${fmt(it.cost)} zł</td>
-      </tr>`;
-  }).join('');
-  html += `
-    <details open>
-      <summary style="padding:8px 12px;font-weight:700;cursor:pointer">${catLabel[cat]}</summary>
-      <div class="scroll" style="margin:0 12px 10px">
-        <table class="table">
-          <thead class="thead">
-            <tr>
-              <th>Produkt</th><th>Marka</th>
-              <th style="text-align:right">Gramatura (g)</th>
-              <th style="text-align:right">Opakowania / waga</th>
-              <th style="text-align:right">Koszt</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </details>`;
-});
+    // budowa sekcji per kategoria (collapsible)
+    let html = '';
+    Object.keys(catLabel).forEach(cat=>{
+      const items = byCat[cat] || [];
+      if(!items.length) return;
+      const rows = items.map(it=>{
+        const hint = packHint(it.k, it.g);
+        return `
+          <tr>
+            <td>${it.label}</td>
+            <td>${(NUTRI[it.k]?.brand)||'-'}</td>
+            <td style="text-align:right">${Math.round(it.g)}</td>
+            <td style="text-align:right">${hint}</td>
+            <td style="text-align:right">${fmt(it.cost)} zł</td>
+          </tr>`;
+      }).join('');
+      html += `
+        <details open>
+          <summary style="padding:8px 12px;font-weight:700;cursor:pointer">${catLabel[cat]}</summary>
+          <div class="scroll" style="margin:0 12px 10px">
+            <table class="table">
+              <thead class="thead">
+                <tr>
+                  <th>Produkt</th><th>Marka</th>
+                  <th style="text-align:right">Gramatura (g)</th>
+                  <th style="text-align:right">Opakowania / waga</th>
+                  <th style="text-align:right">Koszt</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </details>`;
+    });
 
-html += `
-  <div style="padding:8px 12px;border-top:1px dashed var(--br);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-    <span class="pill">💰 Razem: <b>${fmt(total)} zł</b></span>
-  </div>`;
+    html += `
+      <div style="padding:8px 12px;border-top:1px dashed var(--br);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="pill">💰 Razem: <b>${fmt(total)} zł</b></span>
+      </div>`;
 
-target.innerHTML = html;
+    target.innerHTML = html;
   });
 }
 
@@ -1365,6 +1304,7 @@ if (window.matchMedia('(max-width: 560px)').matches) {
   renderAll();
   setupPrintButtons();
   document.getElementById('mealFilter').addEventListener('change', applyMealFilter);
+  autoTopUpAllDaysSmart();  
 });
 // ======= Mobilne udogodnienia =======
 function _toggleScrollShadows(){
