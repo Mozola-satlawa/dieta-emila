@@ -761,13 +761,16 @@ function _calcDayMacros(dayMeals){
   return {P,F,C};
 }
 
-// preferencje dobiegania makro
-const TOPUP_PREF = {
-  FAT:   { food:'orzechy_wloskie', sec:['drugie','kolacja'] },
-  CARB:  { food:'ryz_basmati_suchy', sec:['obiad'] },
-  PROT:  { food:'twarog', sec:['kolacja','drugie'] },
-  OIL:   { food:'oliwa', sec:['kolacja'] }
+// sensowne limity jednorazowych „dobić” (g)
+const LIMITS = {
+  orzechy_wloskie: 30,
+  ryz_basmati_suchy: 60,
+  twarog: 150,
+  kuskus_suchy: 60,
+  maslo_orzechowe: 30,
+  banan: 150
 };
+function clipG(k,g){ return Math.max(0, Math.min(g, LIMITS[k] ?? g)); }
 
 function _pushCorrection(dayMeals, sec, k, g, label){
   (dayMeals[sec] ||= []).push({ k, g, l:label, _autoCorr:true });
@@ -789,18 +792,49 @@ function _smartTopUpDay(dayMeals){
   let defP = Math.max(0, TARGETS.P*TARGET_KCAL - pK);
 
   // 3) Najpierw makra z normalnych produktów
-  if(defF > 0){
-    const g = gramsForMacroFromFood(TOPUP_PREF.FAT.food,'F', defF);
-    if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.FAT.sec[0], TOPUP_PREF.FAT.food, g, 'Korekta: orzechy'); needK-=g*(NUTRI.orzechy_wloskie.f*9/100); }
-  }
-  if(defC > 0){
-    const g = gramsForMacroFromFood(TOPUP_PREF.CARB.food,'C', defC);
-    if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.CARB.sec[0], TOPUP_PREF.CARB.food, g, 'Korekta: ryż (suchy)'); needK-=g*(NUTRI.ryz_basmati_suchy.c*4/100); }
-  }
-  if(defP > 0){
-    const g = gramsForMacroFromFood(TOPUP_PREF.PROT.food,'P', defP);
-    if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.PROT.sec[0], TOPUP_PREF.PROT.food, g, 'Korekta: twaróg'); needK-=g*(NUTRI.twarog.p*4/100); }
-  }
+ // tłuszcz — orzechy
+if(defF > 0){
+  let g = gramsForMacroFromFood(TOPUP_PREF.FAT.food,'F', defF);
+  g = clipG('orzechy_wloskie', g);
+  if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.FAT.sec[0], 'orzechy_wloskie', g, 'Korekta: orzechy');
+           needK -= g*(NUTRI.orzechy_wloskie.f*9/100); }
+}
+// węgle — ryż (suchy)
+if(defC > 0){
+  let g = gramsForMacroFromFood(TOPUP_PREF.CARB.food,'C', defC);
+  g = clipG('ryz_basmati_suchy', g);
+  if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.CARB.sec[0], 'ryz_basmati_suchy', g, 'Korekta: ryż (suchy)');
+           needK -= g*(NUTRI.ryz_basmati_suchy.c*4/100); }
+}
+// białko — twaróg
+if(defP > 0){
+  let g = gramsForMacroFromFood(TOPUP_PREF.PROT.food,'P', defP);
+  g = clipG('twarog', g);
+  if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.PROT.sec[0], 'twarog', g, 'Korekta: twaróg');
+           needK -= g*(NUTRI.twarog.p*4/100); }
+}
+
+// dodatkowe węgle — kuskus
+if(needK > 60){
+  let gZ = gramsForMacroFromFood('kuskus_suchy','C', Math.min(needK, 200));
+  gZ = clipG('kuskus_suchy', gZ);
+  if(gZ>0){ _pushCorrection(dayMeals, 'obiad', 'kuskus_suchy', gZ, 'Korekta: kuskus');
+            needK -= gZ*(NUTRI.kuskus_suchy.c*4/100); }
+}
+// „przekąska” — masło orzechowe
+if(needK > 60){
+  let gPB = Math.max(0, Math.round((Math.min(needK, 180)/9)/5)*5);
+  gPB = clipG('maslo_orzechowe', gPB);
+  if(gPB>0){ _pushCorrection(dayMeals, 'drugie', 'maslo_orzechowe', gPB, 'Korekta: masło orzechowe');
+             needK -= gPB*(NUTRI.maslo_orzechowe.kcal/100); }
+}
+// owoce do jogurtu — banan
+if(needK > 60){
+  let gBan = Math.min(needK/0.89, LIMITS.banan);
+  const gR = Math.max(0, Math.round(gBan/10)*10);
+  if(gR>0){ _pushCorrection(dayMeals, 'jogurt', 'banan', gR, 'Dodatek: banan do jogurtu');
+            needK -= gR*0.89; }
+}
 
   // 4) Jeśli nadal brakuje kcal – dosyp zboża + „przekąska” (masło orzechowe / banan)
   if(needK > 60){
@@ -1099,6 +1133,33 @@ function renderShoppingBar(){
     wrap.appendChild(b);
   });
 }
+function boot(){
+  // 1) jednorazowo wyrównaj dni do celu makro/kcal
+  autoTopUpAllDays();
+
+  // 2) wyrenderuj UI
+  renderWeeks();
+  activateTabs();
+  applyMealFilter();
+  recalcCostsAndSums();
+  wireChecklist();
+  drawAllCharts();
+
+  // 3) podłącz przycisk „⚡ Auto 2800”
+  const btn = document.getElementById('autoKcal');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      autoTopUpAllDays();
+      renderWeeks();
+      activateTabs();
+      applyMealFilter();
+      recalcCostsAndSums();
+      wireChecklist();
+      drawAllCharts();
+    });
+  }
+}
+document.addEventListener('DOMContentLoaded', boot);
 /* ============ ZAKUPY – podpowiedź opakowań i kategorie ============ */
 function packHint(ingKey, grams){
   const nd = NUTRI[ingKey] || {};
