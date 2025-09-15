@@ -601,7 +601,7 @@ const TOLERANCE_KCAL = 100;
 const TOL_PCT_PT = 3;
 
 // ogranicznik oliwy w autokorekcie
-const MAX_OIL_CORR_G = 15; // max ~135 kcal z oliwy na dzień
+const MAX_OIL_CORR_G = 5; // max ~135 kcal z oliwy na dzień
 
 function gramsForMacroFromFood(foodKey, macro, targetDeltaKcal){
   const nd = NUTRI[foodKey]; if(!nd) return 0;
@@ -720,21 +720,31 @@ function _calcDayMacros(dayMeals){
   });
   return {P,F,C};
 }
-// preferencje dobiegania makro
+// preferencje dobiegania makro – priorytet: stałe produkty, różnorodność
 const TOPUP_PREF = {
-  FAT:   { food:'orzechy_wloskie', sec:['drugie','kolacja'] },
-  CARB:  { food:'ryz_basmati_suchy', sec:['obiad'] },
-  PROT:  { food:'twarog', sec:['kolacja','drugie'] },
-  OIL:   { food:'oliwa', sec:['kolacja'] }
+  FAT:   { foods:['hummus','feta','orzechy_wloskie','migdaly','awokado'], secs:['drugie','kolacja'] },
+  CARB:  { foods:['ryz_basmati_suchy','kuskus_suchy','platki_owsiane','chleb_zytni'], secs:['obiad','sniadanie','drugie'] },
+  PROT:  { foods:['twarog','jajko','hummus'], secs:['kolacja','drugie','sniadanie'] },
+  MIX:   { foods:['hummus','banan','chleb_zytni'], secs:['drugie','jogurt','sniadanie'] },
+  OIL:   { foods:['oliwa'], secs:['kolacja'] }
 };
+
 // sensowne limity jednorazowych „dobić” (g)
 const LIMITS = {
+  hummus: 80,      // 1–2 łyżki extra
+  feta: 40,        // cienki plaster
   orzechy_wloskie: 30,
+  migdaly: 25,
+  awokado: 80,
   ryz_basmati_suchy: 60,
-  twarog: 150,
   kuskus_suchy: 60,
-  maslo_orzechowe: 30,
-  banan: 150
+  platki_owsiane: 40,
+  chleb_zytni: 60, // +1–2 kromki
+  twarog: 150,
+  jajko: 100,      // +1–2 jajka
+  banan: 150,
+  maslo_orzechowe: 30, // zostawiamy jako opcję „szybkiej energii”
+  oliwa: 5
 };
 function clipG(k,g){ return Math.max(0, Math.min(g, LIMITS[k] ?? g)); }
 
@@ -745,82 +755,54 @@ function _pushCorrection(dayMeals, sec, k, g, label){
 function _smartTopUpDay(dayMeals){
   _removeAutoCorrections(dayMeals);
 
-  // 1) Deficyt kcal ogółem
+  // 1) policz aktualne kcal i makra
   const curK = _calcDayKcal(dayMeals);
   let needK = Math.max(0, TARGET_KCAL - curK);
-
-  // 2) Deficyty makro względem celu (w kcal)
   const {P,F,C} = _calcDayMacros(dayMeals);
-  const pK = P*4, fK = F*9, cK = C*4;
+  let defF = Math.max(0, TARGETS.F*TARGET_KCAL - F*9);
+  let defC = Math.max(0, TARGETS.C*TARGET_KCAL - C*4);
+  let defP = Math.max(0, TARGETS.P*TARGET_KCAL - P*4);
 
-  let defF = Math.max(0, TARGETS.F*TARGET_KCAL - fK);
-  let defC = Math.max(0, TARGETS.C*TARGET_KCAL - cK);
-  let defP = Math.max(0, TARGETS.P*TARGET_KCAL - pK);
+  // pomocnicze dodawanie
+  const add = (sec, food, g, label) => {
+    if(g<=0) return 0;
+    g = clipG(food, Math.round(g/5)*5); // zaokrąglenie i limit
+    if(g<=0) return 0;
+    (dayMeals[sec] ||= []).push({k:food,g,l:label||food,_autoCorr:true});
+    return computeItem(food,g)?.kcal || 0;
+  };
 
-  // 3) Najpierw makra z normalnych produktów
- // tłuszcz — orzechy
-if(defF > 0){
-  let g = gramsForMacroFromFood(TOPUP_PREF.FAT.food,'F', defF);
-  g = clipG('orzechy_wloskie', g);
-  if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.FAT.sec[0], 'orzechy_wloskie', g, 'Korekta: orzechy');
-           needK -= g*(NUTRI.orzechy_wloskie.f*9/100); }
-}
-// węgle — ryż (suchy)
-if(defC > 0){
-  let g = gramsForMacroFromFood(TOPUP_PREF.CARB.food,'C', defC);
-  g = clipG('ryz_basmati_suchy', g);
-  if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.CARB.sec[0], 'ryz_basmati_suchy', g, 'Korekta: ryż (suchy)');
-           needK -= g*(NUTRI.ryz_basmati_suchy.c*4/100); }
-}
-// białko — twaróg
-if(defP > 0){
-  let g = gramsForMacroFromFood(TOPUP_PREF.PROT.food,'P', defP);
-  g = clipG('twarog', g);
-  if(g>0){ _pushCorrection(dayMeals, TOPUP_PREF.PROT.sec[0], 'twarog', g, 'Korekta: twaróg');
-           needK -= g*(NUTRI.twarog.p*4/100); }
-}
-
-// dodatkowe węgle — kuskus
-if(needK > 60){
-  let gZ = gramsForMacroFromFood('kuskus_suchy','C', Math.min(needK, 200));
-  gZ = clipG('kuskus_suchy', gZ);
-  if(gZ>0){ _pushCorrection(dayMeals, 'obiad', 'kuskus_suchy', gZ, 'Korekta: kuskus');
-            needK -= gZ*(NUTRI.kuskus_suchy.c*4/100); }
-}
-// „przekąska” — masło orzechowe
-if(needK > 60){
-  let gPB = Math.max(0, Math.round((Math.min(needK, 180)/9)/5)*5);
-  gPB = clipG('maslo_orzechowe', gPB);
-  if(gPB>0){ _pushCorrection(dayMeals, 'drugie', 'maslo_orzechowe', gPB, 'Korekta: masło orzechowe');
-             needK -= gPB*(NUTRI.maslo_orzechowe.kcal/100); }
-}
-// owoce do jogurtu — banan
-if(needK > 60){
-  let gBan = Math.min(needK/0.89, LIMITS.banan);
-  const gR = Math.max(0, Math.round(gBan/10)*10);
-  if(gR>0){ _pushCorrection(dayMeals, 'jogurt', 'banan', gR, 'Dodatek: banan do jogurtu');
-            needK -= gR*0.89; }
-}
-
-  // 4) Jeśli nadal brakuje kcal – dosyp zboża + „przekąska” (masło orzechowe / banan)
-  if(needK > 60){
-    const gZ = gramsForMacroFromFood('kuskus_suchy','C', Math.min(needK, 200));
-    if(gZ>0){ _pushCorrection(dayMeals, 'obiad', 'kuskus_suchy', gZ, 'Korekta: kuskus'); needK -= gZ*(NUTRI.kuskus_suchy.c*4/100); }
-  }
-  if(needK > 60){
-    const gPB = Math.max(0, Math.round((Math.min(needK, 180)/9)/5)*5); // masło orzechowe ~50% tł
-    if(gPB>0){ _pushCorrection(dayMeals, 'drugie', 'maslo_orzechowe', Math.min(gPB, 30), 'Korekta: masło orzechowe'); needK -= Math.min(gPB,30)* (NUTRI.maslo_orzechowe.kcal/100); }
-  }
-  if(needK > 60){
-    const gBan = Math.min(needK/0.89, 150); // banan ~0.89 kcal/g
-    const gR = Math.max(0, Math.round(gBan/10)*10);
-    if(gR>0){ _pushCorrection(dayMeals, 'jogurt', 'banan', gR, 'Dodatek: banan do jogurtu'); needK -= gR*0.89; }
+  // 2) TŁUSZCZE – różnorodne źródła
+  if(defF > 0){
+    needK -= add('drugie','hummus',40,'Korekta: hummus');
+    needK -= add('kolacja','feta',25,'Korekta: feta');
+    needK -= add('kolacja','orzechy_wloskie',15,'Korekta: orzechy');
   }
 
-  // 5) Absolutny „szlif” oliwą – mały i z limitem
+  // 3) WĘGLE – najpierw ryż/kuskus/chleb, potem banan
+  if(defC > 0){
+    needK -= add('obiad','ryz_basmati_suchy',50,'Korekta: ryż');
+    needK -= add('obiad','kuskus_suchy',40,'Korekta: kuskus');
+    needK -= add('sniadanie','chleb_zytni',40,'Korekta: chleb');
+  }
+  if(needK > 80){
+    needK -= add('jogurt','banan',120,'Dodatek: banan do jogurtu');
+  }
+
+  // 4) BIAŁKO – twaróg / jajko
+  if(defP > 0){
+    needK -= add('kolacja','twarog',100,'Korekta: twaróg');
+    needK -= add('sniadanie','jajko',50,'Korekta: jajko');
+  }
+
+  // 5) Masło orzechowe jako szybka przekąska
+  if(needK > 120){
+    needK -= add('drugie','maslo_orzechowe',20,'Korekta: masło orzechowe');
+  }
+
+  // 6) Szlif oliwą (max 5 g)
   if(needK > 0){
-    const gOil = Math.min(MAX_OIL_CORR_G, Math.max(0, Math.round((needK/9)/5)*5));
-    if(gOil>0){ _pushCorrection(dayMeals, TOPUP_PREF.OIL.sec[0], 'oliwa', gOil, 'Szlif: oliwa'); }
+    needK -= add('kolacja','oliwa',Math.min(5,Math.round(needK/9)),'Szlif: oliwa');
   }
 }
 
