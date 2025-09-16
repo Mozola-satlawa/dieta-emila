@@ -342,275 +342,247 @@ const MEAL_NAMES = {
    żeby nie zmieniać dziennych sum. */
 
 /* ========== TYDZIEŃ 1 – BEZ ZMIAN (TWÓJ ORYGINAŁ) ========== */
+/* ============ PLAN – 4 tygodnie (bardziej zmienny, oliwa ≤ 5 g/dzień) ============ */
 const PLAN = {
   week1:{ title:'📘 Tydzień 1', days:[
-    {day:'Dzień 1',motto:'„Prosto, sycąco i stabilnie.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80,l:'Dorsz'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 1',motto:'„Umówisz dzisiaj super spotkanie — kalendarz się zapełni!”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'hummus_chef_select',g:50,l:'Hummus Chef Select'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}], kcal:377,b:11,w:63,t:8 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:395,b:24,w:35,t:12 },
+      obiad:{ items:[{k:'dorsz',g:120,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:540,b:28,w:55,t:18 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:70,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pestki_dyni',g:20,l:'Pestki dyni'}], kcal:580,b:15,w:42,t:40 }
+    }, suma_dnia:{kcal:2870,b:92,w:246,t:170}},
 
-    {day:'Dzień 2',motto:'„Powtórka – bo regularność działa.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80,l:'Dorsz'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 2',motto:'„Klienci czekają, żeby kupić od Ciebie pompę ciepła :)”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:120,l:'Borówki'}], kcal:400,b:12,w:66,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:410,b:13,w:45,t:18 },
+      obiad:{ items:[{k:'losos',g:120,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:32,w:54,t:34 },
+      kolacja:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:540,b:13,w:38,t:38 }
+    }, suma_dnia:{kcal:2930,b:84,w:244,t:176}},
 
-    {day:'Dzień 3',motto:'„Delikatna zmiana: łosoś na obiad.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80,l:'Łosoś'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 3',motto:'„Każde spotkanie przybliża Cię do sukcesu — działaj!”',meals:{
+      sniadanie:{ items:[{k:'jajka',g:120,l:'Jajka 2–3 szt.'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:100,l:'Ogórek'}], kcal:420,b:23,w:30,t:23 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:20,l:'Orzechy mix'}], kcal:330,b:12,w:10,t:24 },
+      drugie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'pomidor',g:150,l:'Pomidor'},{k:'chleb_zytni',g:60,l:'Chleb żytni'}], kcal:390,b:24,w:35,t:12 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:70,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'},{k:'pestki_dyni',g:20,l:'Pestki dyni'}], kcal:585,b:15,w:40,t:40 }
+    }, suma_dnia:{kcal:2835,b:87,w:244,t:167}},
 
-    {day:'Dzień 4',motto:'„Dla odmiany: indyk na obiad.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'indyk',g:80,l:'Indyk'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:554.2,b:25.6,w:42.8,t:29.4 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2872.6,b:87.9,w:244.2,t:170}},
+    {day:'Dzień 4',motto:'„Każdy chętnie kupiłby piec — pokaż wartość i zamknij sprzedaż!”',meals:{
+      sniadanie:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:400,b:26,w:34,t:13 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'papryka',g:120,l:'Papryka'}], kcal:450,b:12,w:42,t:22 },
+      obiad:{ items:[{k:'indyk',g:150,l:'Indyk'},{k:'bulgur_suchy',g:50,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:620,b:38,w:52,t:22 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:70,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'},{k:'pestki_dyni',g:20,l:'Pestki dyni'}], kcal:585,b:15,w:40,t:40 }
+    }, suma_dnia:{kcal:2875,b:89,w:240,t:170}},
 
-    {day:'Dzień 5',motto:'„Konsekwencja w prostych wyborach.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'mintaj',g:80,l:'Mintaj'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 5',motto:'„Zrób listę kontaktów i zadzwoń — cel na dziś: nowe spotkania.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:395,b:12,w:64,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:470,b:12,w:45,t:24 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'feta',g:40,l:'Feta'},{k:'pomidor',g:180,l:'Pomidor'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:520,b:16,w:36,t:32 }
+    }, suma_dnia:{kcal:2835,b:86,w:244,t:167}},
 
-    {day:'Dzień 6',motto:'„Więcej tłuszczu z ryby – łosoś.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80,l:'Łosoś'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 6',motto:'„Dzisiaj dzień sprzedaży — dasz radę!”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'awokado',g:80,l:'Awokado'},{k:'pomidor',g:150,l:'Pomidor'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}], kcal:480,b:8,w:45,t:28 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:400,b:26,w:34,t:13 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:33,w:54,t:34 },
+      kolacja:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:480,b:12,w:45,t:18 }
+    }, suma_dnia:{kcal:2930,b:86,w:244,t:176}},
 
-    {day:'Dzień 7',motto:'„Niedzielna regeneracja – ryba i warzywa.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Owsianka (płatki)'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150,l:'Jogurt naturalny'},{k:'orzechy_mix',g:40,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100,l:'Hummus Chef Select'},{k:'chleb_zytni',g:40,l:'Chleb żytni'},{k:'papryka',g:100,l:'Papryka'}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80,l:'Dorsz'},{k:'bulgur_suchy',g:40,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:200,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250,l:'Sałatka Chef Select'},{k:'awokado',g:120,l:'Awokado'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80,l:'Pasta Vemondo'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pomidor',g:150,l:'Pomidor'},{k:'oliwa',g:5,l:'Oliwa'},{k:'pestki_dyni',g:25,l:'Pestki dyni'},{k:'chleb_zytni',g:40,l:'Chleb żytni'}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 7',motto:'„Niedziela: ładujesz baterie i planujesz wygraną na jutro.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:60,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'jablko',g:150,l:'Jabłko'}], kcal:370,b:10,w:60,t:8 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:420,b:13,w:42,t:18 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:70,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'},{k:'pestki_dyni',g:20,l:'Pestki dyni'}], kcal:585,b:15,w:40,t:40 }
+    }, suma_dnia:{kcal:2835,b:86,w:244,t:167}},
 
     {day:'Zakupy_T1',motto:'Lista zbiorcza dla Tygodnia 1',shopping:true}
   ]},
 
-  /* ========== TYDZIEŃ 2 – ŚNIADANIA UROZMAICONE ========== */
   week2:{ title:'📘 Tydzień 2', days:[
-    {day:'Dzień 1',motto:'„Start spokojny – kanapki z hummusem.”',meals:{
-      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'hummus_chef_select',g:40,l:'Hummus Chef Select'},{k:'ogorek',g:100,l:'Ogórek'},{k:'pestki_dyni',g:10,l:'Pestki dyni'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 1',motto:'„Każde spotkanie przybliża Cię do sukcesu — działaj!”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:420,b:13,w:42,t:18 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:530,b:28,w:36,t:26 }
+    }, suma_dnia:{kcal:2830,b:86,w:244,t:166}},
 
-    {day:'Dzień 2',motto:'„Jajka + pieczywo + pomidor.”',meals:{
-      sniadanie:{ items:[{k:'jajka',g:100,l:'Jajka 2 szt.'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 2',motto:'„Zadzwoń teraz — kolejny klient chce rozwiązać swój problem.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:120,l:'Borówki'}], kcal:400,b:12,w:66,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'papryka',g:120,l:'Papryka'}], kcal:480,b:12,w:46,t:24 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:33,w:54,t:34 },
+      kolacja:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'pomidor',g:160,l:'Pomidor'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:520,b:26,w:36,t:25 }
+    }, suma_dnia:{kcal:2930,b:87,w:244,t:176}},
 
-    {day:'Dzień 3',motto:'„Twaróg na śniadanie.”',meals:{
-      sniadanie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:100,l:'Ogórek'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'mintaj',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 3',motto:'„Sukces to nawyk: 5 telefonów więcej i masz przewagę.”',meals:{
+      sniadanie:{ items:[{k:'jajka',g:120,l:'Jajka 2–3 szt.'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:100,l:'Ogórek'}], kcal:420,b:23,w:30,t:23 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'feta',g:35,l:'Feta'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:430,b:13,w:42,t:19 },
+      obiad:{ items:[{k:'indyk',g:150,l:'Indyk'},{k:'bulgur_suchy',g:50,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:620,b:38,w:52,t:22 },
+      kolacja:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:500,b:12,w:46,t:22 }
+    }, suma_dnia:{kcal:2870,b:89,w:240,t:170}},
 
-    {day:'Dzień 4',motto:'„Owsianka z borówkami.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70},{k:'napoj_migdalowy',g:250},{k:'borowki',g:100}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'indyk',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:554.2,b:25.6,w:42.8,t:29.4 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2872.6,b:87.9,w:244.2,t:170}},
+    {day:'Dzień 4',motto:'„Twoja oferta = ich spokój na lata. Zamknij to dziś!”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'awokado',g:80,l:'Awokado'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:470,b:8,w:45,t:27 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:400,b:26,w:34,t:13 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:70,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'},{k:'pestki_dyni',g:20,l:'Pestki dyni'}], kcal:585,b:15,w:40,t:40 }
+    }, suma_dnia:{kcal:2835,b:86,w:244,t:167}},
 
-    {day:'Dzień 5',motto:'„Kanapki z pastą Vemondo.”',meals:{
-      sniadanie:{ items:[{k:'chleb_zytni',g:80},{k:'pasta_vemondo',g:50,l:'Pasta Vemondo'},{k:'pomidor',g:120},{k:'ogorek',g:80}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 5',motto:'„Wytrwałość wygrywa — dziś budujesz pipeline.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:395,b:12,w:64,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'papryka',g:120,l:'Papryka'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:530,b:28,w:36,t:26 }
+    }, suma_dnia:{kcal:2830,b:87,w:244,t:166}},
 
-    {day:'Dzień 6',motto:'„Twaróg + pestki dyni.”',meals:{
-      sniadanie:{ items:[{k:'twarog',g:150},{k:'chleb_zytni',g:60},{k:'pestki_dyni',g:10}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 6',motto:'„Dopnij umowę — jesteś o jeden telefon od sukcesu.”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:420,b:13,w:42,t:18 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:480,b:12,w:46,t:24 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:33,w:54,t:34 },
+      kolacja:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'pomidor',g:160,l:'Pomidor'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:520,b:26,w:36,t:25 }
+    }, suma_dnia:{kcal:2930,b:86,w:244,t:176}},
 
-    {day:'Dzień 7',motto:'„Jajka + awokado (kanapki).”',meals:{
-      sniadanie:{ items:[{k:'jajka',g:100},{k:'chleb_zytni',g:60},{k:'awokado',g:60}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 7',motto:'„Spokój + plan = mocny tydzień. Działasz od poniedziałku.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:60,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'jablko',g:150,l:'Jabłko'}], kcal:370,b:10,w:60,t:8 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'awokado',g:80,l:'Awokado'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:500,b:8,w:46,t:30 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:70,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:20,l:'Pestki dyni'}], kcal:585,b:15,w:40,t:40 }
+    }, suma_dnia:{kcal:2835,b:86,w:244,t:167}},
 
     {day:'Zakupy_T2',motto:'Lista zbiorcza dla Tygodnia 2',shopping:true}
   ]},
 
-  /* ========== TYDZIEŃ 3 – ŚNIADANIA UROZMAICONE ========== */
   week3:{ title:'📘 Tydzień 3', days:[
-    {day:'Dzień 1',motto:'„Kanapki: feta + pomidor.”',meals:{
-      sniadanie:{ items:[{k:'chleb_zytni',g:80},{k:'feta',g:30,l:'Feta'},{k:'pomidor',g:150}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 1',motto:'„Zrób listę kontaktów i zadzwoń — cel na dziś: nowe spotkania.”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:420,b:13,w:42,t:18 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:480,b:12,w:46,t:24 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:530,b:28,w:36,t:26 }
+    }, suma_dnia:{kcal:2830,b:86,w:244,t:166}},
 
-    {day:'Dzień 2',motto:'„Owsianka bazowa (raz na tydzień).”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70},{k:'napoj_migdalowy',g:250},{k:'borowki',g:100}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 2',motto:'„Rozmowa → potrzeba → rozwiązanie. Sprzedaj pewnie!”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:120,l:'Borówki'}], kcal:400,b:12,w:66,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'papryka',g:120,l:'Papryka'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:33,w:54,t:34 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:540,b:13,w:44,t:30 }
+    }, suma_dnia:{kcal:2930,b:86,w:244,t:176}},
 
-    {day:'Dzień 3',motto:'„Jajecznica (bez dodatku mleka).”',meals:{
-      sniadanie:{ items:[{k:'jajka',g:100},{k:'chleb_zytni',g:60},{k:'cebula',g:30,l:'Cebula'}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'indyk',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:25}], kcal:554.2,b:25.6,w:42.8,t:29.4 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:15},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2872.6,b:87.9,w:244.2,t:170}},
+    {day:'Dzień 3',motto:'„Plan → telefon → spotkanie. Jedno po drugim!”',meals:{
+      sniadanie:{ items:[{k:'jajka',g:120,l:'Jajka 2–3 szt.'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:430,b:24,w:32,t:22 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:20,l:'Orzechy mix'}], kcal:330,b:12,w:10,t:24 },
+      drugie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:400,b:26,w:34,t:13 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'papryka',g:120,l:'Papryka'}], kcal:500,b:12,w:46,t:22 }
+    }, suma_dnia:{kcal:2840,b:87,w:242,t:168}},
 
-    {day:'Dzień 4',motto:'„Kanapki: hummus + ogórek.”',meals:{
-      sniadanie:{ items:[{k:'chleb_zytni',g:80},{k:'hummus_chef_select',g:40},{k:'ogorek',g:120}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 4',motto:'„Dopnij umowę — jesteś o jeden telefon od sukcesu.”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'awokado',g:80,l:'Awokado'},{k:'pomidor',g:150,l:'Pomidor'}], kcal:470,b:8,w:45,t:27 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'feta',g:35,l:'Feta'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:430,b:13,w:42,t:19 },
+      obiad:{ items:[{k:'indyk',g:150,l:'Indyk'},{k:'bulgur_suchy',g:50,l:'Bulgur (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:620,b:38,w:52,t:22 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:540,b:13,w:44,t:30 }
+    }, suma_dnia:{kcal:2910,b:86,w:244,t:175}},
 
-    {day:'Dzień 5',motto:'„Owsianka (rotacja raz/tydz.).”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70},{k:'napoj_migdalowy',g:250},{k:'borowki',g:100}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'mintaj',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 5',motto:'„Wytrwałość wygrywa — dziś budujesz pipeline.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:395,b:12,w:64,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'papryka',g:120,l:'Papryka'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:530,b:28,w:36,t:26 }
+    }, suma_dnia:{kcal:2805,b:86,w:240,t:165}},
 
-    {day:'Dzień 6',motto:'„Jajka + chleb + ogórek.”',meals:{
-      sniadanie:{ items:[{k:'jajka',g:100},{k:'chleb_zytni',g:60},{k:'ogorek',g:120}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 6',motto:'„Zadzwoń teraz — kolejny klient chce rozwiązać swój problem.”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:420,b:13,w:42,t:18 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:33,w:54,t:34 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:540,b:13,w:44,t:30 }
+    }, suma_dnia:{kcal:2940,b:85,w:245,t:178}},
 
-    {day:'Dzień 7',motto:'„Kanapki: twaróg + pomidor.”',meals:{
-      sniadanie:{ items:[{k:'twarog',g:150},{k:'chleb_zytni',g:60},{k:'pomidor',g:150}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 7',motto:'„Chwila oddechu — jutro wracasz po swoje cele.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:60,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'jablko',g:150,l:'Jabłko'}], kcal:370,b:10,w:60,t:8 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'awokado',g:80,l:'Awokado'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:500,b:8,w:46,t:30 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:520,b:26,w:36,t:25 }
+    }, suma_dnia:{kcal:2835,b:86,w:244,t:167}},
 
     {day:'Zakupy_T3',motto:'Lista zbiorcza dla Tygodnia 3',shopping:true}
   ]},
 
-  /* ========== TYDZIEŃ 4 – ŚNIADANIA UROZMAICONE ========== */
   week4:{ title:'📘 Tydzień 4', days:[
-    {day:'Dzień 1',motto:'„Kanapki: hummus + papryka.”',meals:{
-      sniadanie:{ items:[{k:'chleb_zytni',g:80},{k:'hummus_chef_select',g:40},{k:'papryka',g:120}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 1',motto:'„Zrób listę kontaktów i zadzwoń — cel na dziś: nowe spotkania.”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'papryka',g:120,l:'Papryka'}], kcal:470,b:12,w:45,t:22 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:400,b:26,w:34,t:13 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:650,b:33,w:54,t:33 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:150,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:540,b:13,w:44,t:30 }
+    }, suma_dnia:{kcal:2910,b:86,w:244,t:175}},
 
-    {day:'Dzień 2',motto:'„Owsianka klasyczna.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70},{k:'napoj_migdalowy',g:250},{k:'borowki',g:100}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 2',motto:'„Każdy chętnie kupiłby piec — pokaż wartość i zamknij sprzedaż!”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:395,b:12,w:64,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:420,b:13,w:42,t:18 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'papryka',g:120,l:'Papryka'}], kcal:500,b:12,w:46,t:22 }
+    }, suma_dnia:{kcal:2825,b:85,w:247,t:164}},
 
-    {day:'Dzień 3',motto:'„Jajka + awokado (tosty).”',meals:{
-      sniadanie:{ items:[{k:'jajka',g:100},{k:'chleb_zytni',g:60},{k:'awokado',g:60}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'mintaj',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 3',motto:'„Sukces to nawyk: 5 telefonów więcej i masz przewagę.”',meals:{
+      sniadanie:{ items:[{k:'jajka',g:120,l:'Jajka 2–3 szt.'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:420,b:23,w:30,t:23 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:520,b:28,w:36,t:26 },
+      obiad:{ items:[{k:'indyk',g:150,l:'Indyk'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:620,b:38,w:52,t:22 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:520,b:13,w:42,t:24 }
+    }, suma_dnia:{kcal:2930,b:90,w:247,t:175}},
 
-    {day:'Dzień 4',motto:'„Kanapki: twaróg + ogórek.”',meals:{
-      sniadanie:{ items:[{k:'twarog',g:150},{k:'chleb_zytni',g:60},{k:'ogorek',g:120}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'losos',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:612.6,b:24.8,w:42.8,t:35.8 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2931,b:87.1,w:244.2,t:176.4}},
+    {day:'Dzień 4',motto:'„Zadzwoń teraz — kolejny klient chce rozwiązać swój problem.”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:420,b:13,w:42,t:18 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:520,b:26,w:36,t:25 }
+    }, suma_dnia:{kcal:2870,b:87,w:243,t:167}},
 
-    {day:'Dzień 5',motto:'„Owsianka z borówkami.”',meals:{
-      sniadanie:{ items:[{k:'platki_owsiane',g:70},{k:'napoj_migdalowy',g:250},{k:'borowki',g:100}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}},
+    {day:'Dzień 5',motto:'„Dziś zapełnisz tydzień wartościowymi spotkaniami.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:70,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:300,l:'Napój migdałowy'},{k:'borowki',g:100,l:'Borówki'}], kcal:395,b:12,w:64,t:9 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'papryka',g:120,l:'Papryka'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'dorsz',g:140,l:'Dorsz'},{k:'ryz_basmati_suchy',g:50,l:'Ryż basmati (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:560,b:34,w:54,t:19 },
+      kolacja:{ items:[{k:'twarog',g:160,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:530,b:28,w:36,t:26 }
+    }, suma_dnia:{kcal:2825,b:86,w:240,t:165}},
 
-    {day:'Dzień 6',motto:'„Jajka + chleb + papryka.”',meals:{
-      sniadanie:{ items:[{k:'jajka',g:100},{k:'chleb_zytni',g:60},{k:'papryka',g:120}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'indyk',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:554.2,b:25.6,w:42.8,t:29.4 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2872.6,b:87.9,w:244.2,t:170}},
+    {day:'Dzień 6',motto:'„Twoja oferta = ich spokój na lata. Zamknij to dziś!”',meals:{
+      sniadanie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'feta',g:35,l:'Feta'},{k:'pomidor',g:160,l:'Pomidor'}], kcal:420,b:13,w:42,t:18 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'hummus_chef_select',g:60,l:'Hummus Chef Select'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:470,b:12,w:45,t:22 },
+      obiad:{ items:[{k:'losos',g:130,l:'Łosoś'},{k:'kuskus_suchy',g:50,l:'Kuskus (suchy)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:660,b:33,w:54,t:34 },
+      kolacja:{ items:[{k:'pasta_vemondo',g:60,l:'Pasta Vemondo'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:540,b:13,w:44,t:30 }
+    }, suma_dnia:{kcal:2940,b:86,w:244,t:178}},
 
-    {day:'Dzień 7',motto:'„Kanapki: feta + ogórek.”',meals:{
-      sniadanie:{ items:[{k:'chleb_zytni',g:80},{k:'feta',g:30},{k:'ogorek',g:100}], kcal:377.4,b:11.1,w:63.5,t:8 },
-      jogurt:{ items:[{k:'jogurt_nat',g:150},{k:'orzechy_mix',g:40}], kcal:350,b:13.5,w:11.6,t:27.8 },
-      drugie:{ items:[{k:'hummus_chef_select',g:100},{k:'chleb_zytni',g:40},{k:'papryka',g:100}], kcal:395,b:10.7,w:35.2,t:21.9 },
-      obiad:{ items:[{k:'dorsz',g:80},{k:'bulgur_suchy',g:40},{k:'warzywa_mrozone',g:200},{k:'oliwa',g:5}], kcal:515.8,b:24,w:42.8,t:26 },
-      podwieczorek:{ items:[{k:'salatka_chef_select',g:250},{k:'awokado',g:120},{k:'chleb_zytni',g:40}], kcal:584,b:12.6,w:51.8,t:38.6 },
-      kolacja:{ items:[{k:'pasta_vemondo',g:80},{k:'ogorek',g:100},{k:'pomidor',g:150},{k:'oliwa',g:5},{k:'pestki_dyni',g:25},{k:'chleb_zytni',g:40}], kcal:612,b:14.4,w:39.3,t:44.3 }
-    }, suma_dnia:{kcal:2834.2,b:86.3,w:244.2,t:166.6}}
-  ]} 
+    {day:'Dzień 7',motto:'„Odpocznij mądrze. Jutro działasz z pełną mocą.”',meals:{
+      sniadanie:{ items:[{k:'platki_owsiane',g:60,l:'Płatki owsiane'},{k:'napoj_migdalowy',g:250,l:'Napój migdałowy'},{k:'jablko',g:150,l:'Jabłko'}], kcal:370,b:10,w:60,t:8 },
+      jogurt:{ items:[{k:'jogurt_nat',g:200,l:'Jogurt naturalny'},{k:'orzechy_mix',g:25,l:'Orzechy mix'}], kcal:350,b:13.5,w:11.6,t:27.8 },
+      drugie:{ items:[{k:'chleb_zytni',g:80,l:'Chleb żytni'},{k:'awokado',g:80,l:'Awokado'},{k:'ogorek',g:120,l:'Ogórek'}], kcal:500,b:8,w:46,t:30 },
+      obiad:{ items:[{k:'mintaj',g:150,l:'Mintaj'},{k:'kasza_gryczana_sucha',g:50,l:'Kasza gryczana (sucha)'},{k:'warzywa_mrozone',g:250,l:'Warzywa mrożone'},{k:'oliwa',g:5,l:'Oliwa'}], kcal:580,b:33,w:50,t:20 },
+      kolacja:{ items:[{k:'twarog',g:150,l:'Twaróg półtłusty'},{k:'chleb_zytni',g:60,l:'Chleb żytni'},{k:'pomidor',g:160,l:'Pomidor'},{k:'pestki_dyni',g:15,l:'Pestki dyni'}], kcal:520,b:26,w:36,t:25 }
+    }, suma_dnia:{kcal:2835,b:86,w:244,t:167}},
+
+    {day:'Zakupy_T4',motto:'Lista zbiorcza dla Tygodnia 4',shopping:true}
+  ]}
 };
 /* ======= KONIEC PLAN ======= */
 
