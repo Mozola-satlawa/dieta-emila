@@ -818,6 +818,80 @@ function renderShoppingForWeek(){
 }
 
 /* ============ Generowanie widoków tygodni/dni ============ */
+function renderWeeks(){
+  const tabs = document.getElementById('weekTabs');
+  const root = document.getElementById('weeksRoot');
+  if(!tabs || !root) return;
+  tabs.innerHTML = '';
+  root.innerHTML = '';
+
+  const weekKeys = Object.keys(PLAN);
+  weekKeys.forEach((wk, wIndex)=>{
+    const tab = document.createElement('button');
+    tab.className = 'tab'+(wIndex===0?' active':'');
+    tab.textContent = PLAN[wk].title || wk;
+    tab.dataset.week = wk;
+    tabs.appendChild(tab);
+
+    const panel = document.createElement('div');
+    panel.className = 'panel'+(wIndex===0?' active':'');
+    panel.dataset.week = wk;
+
+    const subtabs = document.createElement('div');
+    subtabs.className = 'subtabs';
+    panel.appendChild(subtabs);
+
+    const days = PLAN[wk].days || [];
+    days.forEach((day, dIndex)=>{
+      if(day.shopping) return; // pomiń pseudo-dzień "Zakupy_T*"
+      const sub = document.createElement('button');
+      sub.className = 'subtab'+(dIndex===0?' active':'');
+      sub.textContent = day.day || ('Dzień '+(dIndex+1));
+      sub.dataset.day = dIndex;
+      subtabs.appendChild(sub);
+
+      const card = document.createElement('div');
+      card.className = 'card daycard'+(dIndex===0?' active':'');
+      card.dataset.day = dIndex;
+      card.innerHTML = renderDayTable(day, wk, dIndex);
+      panel.appendChild(card);
+    });
+
+    root.appendChild(panel);
+  });
+
+  // przełączanie tygodni
+  tabs.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      root.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      const panel = root.querySelector(`.panel[data-week="${tab.dataset.week}"]`);
+      if(panel){
+        panel.classList.add('active');
+        const activeSub = panel.querySelector('.subtab.active') || panel.querySelector('.subtab');
+        if(activeSub) activeSub.click();
+      }
+    });
+  });
+
+  // przełączanie dni (w aktywnym panelu)
+  root.querySelectorAll('.panel').forEach(panel=>{
+    const subs = panel.querySelectorAll('.subtab');
+    subs.forEach(sub=>{
+      sub.addEventListener('click', ()=>{
+        subs.forEach(s=>s.classList.remove('active'));
+        panel.querySelectorAll('.daycard').forEach(c=>c.classList.remove('active'));
+        sub.classList.add('active');
+        const target = panel.querySelector(`.daycard[data-day="${sub.dataset.day}"]`);
+        if(target) target.classList.add('active');
+      });
+    });
+    const first = subs[0];
+    if(first) first.click();
+  });
+}
+
 // (Usuń tę wersję funkcji renderWeeks)
 
 /* ============ Filtr posiłków (select) ============ */
@@ -836,17 +910,11 @@ function _toggleDark(){ document.documentElement.classList.toggle('dark'); }
 
 /* ============ Druk ============ */
 function setPrintMode(mode){
-  document.body.classList.remove('print-mode-day','print-mode-week','print-mode-shopping');
-  if(mode==='day') document.body.classList.add('print-mode-day');
-  if(mode==='week') document.body.classList.add('print-mode-week');
-  if(mode==='shopping') document.body.classList.add('print-mode-shopping');
+  document.body.classList.remove('print-weekly','print-daily');
+  if(mode==='weekly') document.body.classList.add('print-weekly');
+  else if(mode==='daily') document.body.classList.add('print-daily');
   window.print();
 }
-document.getElementById('pDay').onclick  = ()=> setPrintMode('day');
-document.getElementById('pWeek').onclick = ()=> setPrintMode('week');
-document.getElementById('pShop').onclick = ()=> setPrintMode('shopping');
-document.getElementById('pAll').onclick  = ()=> setPrintMode('all');
-
 /* ============ „⚡ Auto 2800” – OLIWA ≤ 15 g + zdrowe tłuszcze ============ */
 /* — cele i limity — */
 const AUTO_TARGET_KCAL = 2800;
@@ -985,92 +1053,6 @@ document.getElementById('autoKcal').onclick = ()=>{
   renderAll();
 };
 
-/* ============ RENDER CAŁOŚCI (start) ============ */
-// (remove this duplicate definition and its usage)
-/* ============ RENDER: tygodnie + dni (taby) ============ */
-function renderWeeks(){
-  const tabs = document.getElementById('weekTabs');
-  const root = document.getElementById('weeksRoot');
-  tabs.innerHTML = '';
-  root.innerHTML = '';
-
-  const weekKeys = Object.keys(PLAN);
-
-  weekKeys.forEach((wk, i)=>{
-    // przycisk tygodnia
-    const b = document.createElement('button');
-    b.className = 'tab' + (i===0 ? ' active' : '');
-    b.textContent = PLAN[wk].title;
-    b.dataset.week = wk;
-    tabs.appendChild(b);
-
-    // panel tygodnia
-    const panel = document.createElement('div');
-    panel.className = 'panel' + (i===0 ? ' active' : '');
-    panel.dataset.week = wk;
-
-    // sub-taby dni
-    const subtabs = document.createElement('div');
-    subtabs.className = 'subtabs';
-    PLAN[wk].days.forEach((d, di)=>{
-      const sb = document.createElement('button');
-      sb.className = 'subtab' + (di===0 ? ' active' : '');
-      sb.textContent = d.day || ('Dzień ' + (di+1));
-      sb.dataset.dayIndex = di;
-      subtabs.appendChild(sb);
-    });
-
-    // karty dni
-    const daysWrap = document.createElement('div');
-    PLAN[wk].days.forEach((d, di)=>{
-      const html = renderDayTable(d, wk, di);
-      const holder = document.createElement('div');
-      holder.innerHTML = html;
-      const card = holder.firstElementChild;
-      if(di!==0) card.classList.remove('active');
-      else card.classList.add('active');
-      daysWrap.appendChild(card);
-    });
-
-    panel.appendChild(subtabs);
-    panel.appendChild(daysWrap);
-    root.appendChild(panel);
-  });
-
-  // logika klikania: tygodnie
-  tabs.querySelectorAll('.tab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      const wk = tab.dataset.week;
-      tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      root.querySelectorAll('.panel').forEach(p=>{
-        p.classList.toggle('active', p.dataset.week===wk);
-      });
-    });
-  });
-
-  // logika klikania: dni w aktywnym tygodniu
-  root.querySelectorAll('.panel').forEach(panel=>{
-    const cards = panel.querySelectorAll('.card.daycard');
-    const buttons = panel.querySelectorAll('.subtab');
-    buttons.forEach((btn, idx)=>{
-      btn.addEventListener('click', ()=>{
-        buttons.forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        cards.forEach((c,i)=>c.classList.toggle('active', i===idx));
-      });
-    });
-  });
-}
-
-/* ============ RENDER ALL ============ */
-function renderAll(){
-  renderWeeks();
-  renderShoppingForWeek();
-  computeSumsAndPrices();
-  applyMealFilter();
-}
-
 /* start po załadowaniu */
 document.addEventListener('DOMContentLoaded', ()=> {
   // zainicjalizuj ceny z pamięci i pierwsze renderowanie
@@ -1191,7 +1173,7 @@ const TOLERANCE_KCAL = 100;
 const TOL_PCT_PT = 3;
 
 // --- Limity oliwy ---
-const OIL_CAP = { perMeal: 5, perDay: 10 }; // max 5 g/posiłek i 10 g/dzień (z menu + korekt)
+const OIL_CAP = { perMeal: 5, perDay: 5 }; // max 5 g/posiłek i 5 g/dzień (z menu + korekt)
 const MAX_OIL_CORR_G = 3;                    // „szlif” oliwą z autokorekty max 3 g
 
 function gramsForMacroFromFood(foodKey, macro, targetDeltaKcal){
@@ -1450,48 +1432,6 @@ function autoTopUpAllDays(){
   });
 }
 
-function renderWeeks(){
-  const tabsEl = document.getElementById('weekTabs');
-  const weeksRoot = document.getElementById('weeksRoot');
-  if(!tabsEl || !weeksRoot) return;
-  tabsEl.innerHTML = '';
-// (Usuń tę wersję funkcji renderWeeks)
-
-  // subtabs
-  document.querySelectorAll('.panel').forEach(panel=>{
-    const subs = panel.querySelectorAll('.subtab');
-    const cards = panel.querySelectorAll('.daycard');
-    subs.forEach(st=>{
-      st.addEventListener('click', ()=>{
-        subs.forEach(x=>x.classList.remove('active'));
-        st.classList.add('active');
-        cards.forEach(c=>c.classList.remove('active'));
-        const day = st.dataset.day;
-        const activeCard = panel.querySelector('.daycard[data-day="' + day + '"]');
-        if(activeCard){ activeCard.classList.add('active'); }
-        syncPrintContext();
-        drawAllCharts();
-      });
-    });
-    // aktywuj pierwszy dzien
-    const first = subs[0];
-    if(first){ first.click(); }
-  });
-
-  // strzałki "poprzedni/następny dzień"
-  document.querySelectorAll('.panel').forEach(panel=>{
-    const subs = [...panel.querySelectorAll('.subtab')];
-    panel.querySelectorAll('.btn.btn-prev').forEach(b=>b.addEventListener('click',()=>{
-      const idx = subs.findIndex(s=>s.classList.contains('active'));
-      if(idx>0) subs[idx-1].click();
-    }));
-    panel.querySelectorAll('.btn.btn-next').forEach(b=>b.addEventListener('click',()=>{
-      const idx = subs.findIndex(s=>s.classList.contains('active'));
-      if(idx<subs.length-1) subs[idx+1].click();
-    }));
-  });
-}
-
 /* ============ FILTR POSIŁKÓW (globalny) ============ */
 function applyMealFilter(){
   const val = document.getElementById('mealFilter').value;
@@ -1629,6 +1569,30 @@ function buildShoppingForWeek(weekKey){
       });
     });
   });
+/* ============ ZAKUPY – storage ============ */
+const SHOP_STORE_KEY = 'emil_shop_v1';
+
+function loadShopDB(){
+  try{ return JSON.parse(localStorage.getItem(SHOP_STORE_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function saveShopDB(db){
+  try{ localStorage.setItem(SHOP_STORE_KEY, JSON.stringify(db)); }catch(e){}
+}
+function getWeekShopState(weekKey){
+  const db = loadShopDB();
+  return db[weekKey] || {};
+}
+function setWeekShopState(weekKey, state){
+  const db = loadShopDB();
+  db[weekKey] = state;
+  saveShopDB(db);
+}
+
+/* aktywny tydzień na podstawie otwartego panelu */
+function getActiveWeekKey(){
+  return document.querySelector('.panel.active')?.dataset.week || Object.keys(PLAN)[0];
+}
 
   const list = Object.entries(map).map(([k,g])=>{
     const cost = priceFor(k,g,prices);
@@ -1728,6 +1692,49 @@ function renderInlineWeekShopping(){
     const target = holder.querySelector('.scroll');
 
     const {list,total} = buildShoppingForWeek(wk);
+    function buildShoppingForWeek(weekKey){
+  // ...tu liczysz agregacje produktów i sumę...
+  const state = getWeekShopState(weekKey);   // 👈 odczyt zapisanych zmian
+
+  let rows = '';
+  // Załóżmy, że masz tablicę pozycji: items = [{key, label, grams, cost}, ...]
+  items.forEach(it=>{
+    const saved = state[it.key] || {};
+    const checked = saved.checked ?? false;
+    const grams = saved.grams ?? it.grams;
+
+    rows += `
+      <tr data-key="${it.key}">
+        <td style="text-align:left">
+          <label style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" class="shop-check" data-key="${it.key}" ${checked?'checked':''}>
+            <span>${it.label || it.key}</span>
+          </label>
+        </td>
+        <td>
+          <input type="number" class="shop-qty" data-key="${it.key}" min="0" step="1" value="${grams}">
+          g
+        </td>
+        <td class="cost">${fmt(it.cost)} zł</td>
+      </tr>`;
+  });
+
+  const html = `
+    <div class="scroll">
+      <table class="table">
+        <thead class="thead"><tr><th>Produkt</th><th>Ilość</th><th>Szac. koszt</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr class="sum-row"><td colspan="2"><b>RAZEM</b></td><td><b>${fmt(total)} zł</b></td></tr></tfoot>
+      </table>
+    </div>
+    <div class="printbar" style="padding:8px 12px">
+      <button class="btn" id="btnClearShop">🧹 Wyzeruj stan dla tego tygodnia</button>
+    </div>
+  `;
+
+  const out = document.getElementById('shoppingListWrap');
+  out.innerHTML = html;
+}
 
     // grupowanie po kategoriach
     const byCat = {};
@@ -1837,6 +1844,40 @@ function _toggleDark(){
     }
   }catch(e){}
 })();
+document.getElementById('shoppingListWrap').addEventListener('input', (e)=>{
+  const wk = getActiveWeekKey();
+  const state = getWeekShopState(wk);
+
+  if(e.target.matches('.shop-qty')){
+    const k = e.target.dataset.key;
+    const grams = Math.max(0, parseFloat(e.target.value) || 0);
+    state[k] = { ...(state[k]||{}), grams, checked: state[k]?.checked ?? false };
+    setWeekShopState(wk, state);
+    // (opcjonalnie) przelicz koszt pozycji i sumę RAZEM po zmianie grams
+    // recomputeShoppingRowAndTotal(wk, k, grams);
+  }
+});
+
+document.getElementById('shoppingListWrap').addEventListener('change', (e)=>{
+  const wk = getActiveWeekKey();
+  const state = getWeekShopState(wk);
+
+  if(e.target.matches('.shop-check')){
+    const k = e.target.dataset.key;
+    const checked = e.target.checked;
+    state[k] = { ...(state[k]||{}), checked, grams: state[k]?.grams ?? undefined };
+    setWeekShopState(wk, state);
+  }
+});
+
+// przycisk resetu dla tygodnia
+document.getElementById('shoppingListWrap').addEventListener('click', (e)=>{
+  if(e.target.id === 'btnClearShop'){
+    const wk = getActiveWeekKey();
+    setWeekShopState(wk, {});                    // wyczyść zapis
+    buildShoppingForWeek(wk);                    // odtwórz domyślne ilości
+  }
+});
 
 /* ============ RENDER CAŁOŚCI ============ */
 // (remove this duplicate definition)
@@ -1865,6 +1906,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
   // Korekty makro i renderowanie
   if (typeof autoTopUpAllDays === 'function') autoTopUpAllDays();
   renderAll();
+    renderShoppingForWeek();                               // zbuduj pigułki tygodni + handler
+  document.querySelector('#shoppingWeeks .btn')?.click(); // od razu pokaż listę 1. tygodnia
+
   setupPrintButtons();
 
   const mf = document.getElementById('mealFilter');
@@ -1895,101 +1939,6 @@ function _centerActiveSubtab(){
     bar.scrollBy({left: delta, behavior:'smooth'});
   });
 }
-// === HOT-FIX PACK ===
-
-// 2) Tryb ciemny (przycisk w nagłówku)
-(function(){
-  const KEY='emil_dark';
-  if(localStorage.getItem(KEY)==='1'){ document.documentElement.classList.add('dark'); }
-  window._toggleDark = function(){
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem(KEY, document.documentElement.classList.contains('dark')?'1':'0');
-  };
-})();
-
-// 3) Render zakładek tygodni i dni
-function renderWeeks(){
-  const tabsEl   = document.getElementById('weekTabs');
-  const weeksRoot= document.getElementById('weeksRoot');
-  tabsEl.innerHTML = '';
-  weeksRoot.innerHTML = '';
-
-  const weekKeys = Object.keys(PLAN);
-  weekKeys.forEach((wk, i)=>{
-    const tab = document.createElement('button');
-    tab.className = 'tab' + (i===0?' active':'');
-    tab.dataset.week = wk;
-    tab.textContent = PLAN[wk].title;
-    tab.addEventListener('click', ()=>activateWeek(wk));
-    tabsEl.appendChild(tab);
-
-    // panel tygodnia
-    const panel = document.createElement('div');
-    panel.className = 'panel' + (i===0?' active':'');
-    panel.id = 'panel_'+wk;
-
-    // sub-taby (dni)
-    const subtabs = document.createElement('div');
-    subtabs.className='subtabs';
-    PLAN[wk].days.forEach((d, di)=>{
-      const st = document.createElement('button');
-      st.className = 'subtab' + (di===0?' active':'');
-      st.dataset.week=wk; st.dataset.dayIndex=di;
-      st.textContent = d.day;
-      st.addEventListener('click', ()=>activateDay(wk, di));
-      subtabs.appendChild(st);
-    });
-    panel.appendChild(subtabs);
-
-    // karty dni
-    PLAN[wk].days.forEach((d, di)=>{
-      const html = renderDayTable(d, wk, di);
-      const wrap = document.createElement('div');
-      wrap.innerHTML = html;
-      const card = wrap.firstElementChild;        // .card.daycard
-      if(di===0) card.classList.add('active');
-      panel.appendChild(wrap);
-      // Nawigacja „poprzedni / następny”
-      const nav = panel.querySelectorAll('.navday');
-      nav.forEach(n=>{
-        const prev = n.querySelector('.btn-prev');
-        const next = n.querySelector('.btn-next');
-        prev.onclick = ()=> activateDay(wk, Math.max(0, di-1));
-        next.onclick = ()=> activateDay(wk, Math.min(PLAN[wk].days.length-1, di+1));
-      });
-    });
-
-    weeksRoot.appendChild(panel);
-  });
-}
-
-function activateWeek(weekKey){
-  document.querySelectorAll('#weekTabs .tab').forEach(t=>{
-    t.classList.toggle('active', t.dataset.week===weekKey);
-  });
-  document.querySelectorAll('#weeksRoot .panel').forEach(p=>{
-    p.classList.toggle('active', p.id==='panel_'+weekKey);
-  });
-  // domyślnie pierwszy dzień
-  activateDay(weekKey, 0);
-  renderAll();
-}
-
-function activateDay(weekKey, dayIndex){
-  const panel = document.getElementById('panel_'+weekKey);
-  if(!panel) return;
-  // subtabs
-  panel.querySelectorAll('.subtab').forEach((st, i)=>{
-    st.classList.toggle('active', i===dayIndex);
-  });
-  // karty-dni (pierwsze wystąpienie .daycard w każdym wrapie)
-  panel.querySelectorAll('.daycard').forEach((dc, i)=>{
-    dc.classList.toggle('active', i===dayIndex);
-  });
-  // druk: „bieżący dzień/tydzień”
-  document.body.classList.remove('print-mode-day','print-mode-week','print-mode-shopping');
-}
-
 // 4) Liczenie cen i sum + wykres + statusy
 function drawPie(canvas, p, f, c){
   if(!canvas) return;
@@ -2048,12 +1997,6 @@ function initShoppingPills(){
 
 // start rendering (keep existing functions' calls)
 renderAll();
-function renderAll(){
-  renderWeeks();
-  computeSumsAndPrices();
-  applyMealFilter();
-  renderShoppingForWeek();   // ⬅ tutaj
-}
 /* ——— Prosty wykres kołowy ——— */
 function drawPie(canvas, parts){
   if(!canvas) return;
@@ -2077,109 +2020,19 @@ function drawPie(canvas, parts){
 }
 // start – pojedynczy render po załadowaniu DOM
 document.addEventListener('DOMContentLoaded', ()=>{
+
   /* ============ Generowanie widoków tygodni/dni ============ */
-function renderWeeks(){
-  const tabsEl   = document.getElementById('weekTabs');
-  const weeksRoot= document.getElementById('weeksRoot');
-  if(!tabsEl || !weeksRoot) return;
-
-  // wyczyść i zbuduj od zera
-  tabsEl.innerHTML=''; 
-  weeksRoot.innerHTML='';
-
-  Object.keys(PLAN).forEach((wk,i)=>{
-    // TAB tygodnia
-    const tab = document.createElement('div');
-    tab.className = 'tab' + (i===0 ? ' active' : '');
-    tab.dataset.week = wk;
-    tab.textContent = PLAN[wk].title;
-    tabsEl.appendChild(tab);
-
-    // PANEL tygodnia
-    const panel = document.createElement('div');
-    panel.className = 'panel' + (i===0 ? ' active' : '');
-    panel.dataset.week = wk;
-
-    // Subtabs (dni)
-    const subt = document.createElement('div');
-    subt.className = 'subtabs';
-    PLAN[wk].days.forEach((d,j)=>{
-      const st = document.createElement('div');
-      st.className = 'subtab' + (j===0 ? ' active' : '');
-      st.dataset.day = d.day;
-      st.textContent = d.day.replace('Zakupy_','Zakupy ');
-      st.onclick = ()=>{
-        panel.querySelectorAll('.subtab').forEach(x=>x.classList.remove('active'));
-        st.classList.add('active');
-        panel.querySelectorAll('.daycard').forEach(c=>c.classList.remove('active'));
-        const chosen = panel.querySelector(`.daycard[data-day="${d.day}"]`);
-        if(chosen) chosen.classList.add('active');
-      };
-      subt.appendChild(st);
-    });
-    panel.appendChild(subt);
-
-    // Karty dni
-    PLAN[wk].days.forEach((d,j)=>{
-      const html = renderDayTable(d, wk, j);
-      const wrap = document.createElement('div');
-      wrap.innerHTML = html;
-      const card = wrap.firstElementChild;
-      if(card && j===0) card.classList.add('active');
-      panel.appendChild(wrap);
-    });
-
-    weeksRoot.appendChild(panel);
-  });
-
-  // klik w taby tygodni
-  tabsEl.querySelectorAll('.tab').forEach(tab=>{
-    tab.onclick = ()=>{
-      tabsEl.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      const wk = tab.dataset.week;
-      weeksRoot.querySelectorAll('.panel').forEach(p=>{
-        p.classList.toggle('active', p.dataset.week===wk);
-      });
-    };
-  });
 
   // przycisk „Zakupy” pod spodem
   renderShoppingForWeek();
-}
+});
 
 /* (opcjonalnie – tylko jeśli nie masz już tej funkcji w pliku)
-function renderAll(){
-  renderWeeks();
-  computeSumsAndPrices();
-  applyMealFilter();
-}
 */
-  renderAll();
-});
 
 // przycisk „⚡ Auto 2800” już masz – zostaje bez zmian
 // document.getElementById('autoKcal').onclick = ()=>{ autoDistributeAllDays(); renderAll(); };
 
-// poprawka progów makro (jeśli cel to B/T/W = 20/30/50)
-function updateMacroStatus(card, p, f, c){
-  const kcalP = p*4, kcalF = f*9, kcalC = c*4;
-  const tot = Math.max(kcalP+kcalF+kcalC, 1);
-  const pctP = Math.round(kcalP/tot*100);
-  const pctF = Math.round(kcalF/tot*100);
-  const pctC = Math.round(kcalC/tot*100);
-  const el = card.querySelector('.macro-status');
-  if(!el) return;
-  const okP = Math.abs(pctP-20)<=3;
-  const okF = Math.abs(pctF-30)<=5;  // tłuszcz 30%
-  const okC = Math.abs(pctC-50)<=5;  // węgle 50%
-  el.textContent = 'B ' + pctP + '%, T ' + pctF + '%, W ' + pctC + '%';
-  const pill = el.parentElement;
-  pill.classList.remove('ok','warn','err');
-  if(okP && okF && okC) pill.classList.add('ok');
-  else if((okP?1:0)+(okF?1:0)+(okC?1:0) >= 2) pill.classList.add('warn');
-  else pill.classList.add('err');
-}
 </script>
 </body>
-</html>
+</html>  
