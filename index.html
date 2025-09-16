@@ -1,4 +1,4 @@
-
+<!doctype html>
 <html lang="pl">
 <head>
 <meta charset="utf-8">
@@ -140,6 +140,9 @@ tr.tr-sec[style*="display: none"] + tr.sum-row{ display:none !important }
       <table id="priceTable" class="table">
         <thead class="thead"><tr><th>Klucz</th><th>Jednostka</th><th>Cena</th></tr></thead>
         <tbody>
+          <tr data-key="borowki_250g"><td>borowki_250g</td><td>zł/250g</td><td class="pval" contenteditable="true">8.99</td></tr>
+          <tr data-key="napoj_migdalowy_1l"><td>napoj_migdalowy_1l</td><td>zł/1l</td><td class="pval" contenteditable="true">6.49</td></tr>
+          <tr data-key="salatka_chef_select_250g"><td>salatka_chef_select_250g</td><td>zł/250g</td><td class="pval" contenteditable="true">5.99</td></tr>
           <tr data-key="losos_filet_kg"><td>losos_filet_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">79.90</td></tr>
           <tr data-key="dorsz_filet_kg"><td>dorsz_filet_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">49.90</td></tr>
           <tr data-key="mintaj_filet_kg"><td>mintaj_filet_kg</td><td>zł/kg</td><td class="pval" contenteditable="true">29.90</td></tr>
@@ -228,7 +231,9 @@ const NUTRI = {
   awokado:{ brand:'Owoce', kcal:160, p:2, f:15, c:9, priceKey:'awokado_szt', unit:'szt', unitGram:180, pricePerUnit:true },
 // ===== Aliasowanie brakujących kluczy z PLAN do NUTRI =====
 }; // zamknij literal NUTRI po wcześniejszych wpisach
-
+NUTRI.borowki = { brand:'Owoce świeże', kcal:57, p:0.7, f:0.3, c:14, priceKey:'borowki_250g', packed:250 };
+NUTRI.napoj_migdalowy = { brand:'Vemondo', kcal:15, p:0.5, f:1.1, c:0.3, priceKey:'napoj_migdalowy_1l', packed:1000 };
+NUTRI.salatka_chef_select = { brand:'Chef Select', kcal:25, p:1.5, f:0.3, c:4, priceKey:'salatka_chef_select_250g', packed:250 };
 NUTRI.napoj_migdalowy = NUTRI.napoj_migdalowy || { brand:'Vemondo', kcal:15, p:0.5, f:1.1, c:0.3 }; // napój migdałowy ~15 kcal/100g
 NUTRI.jogurt_nat      = NUTRI.jogurt2;         // alias: jogurt naturalny 2%
 NUTRI.orzechy_mix     = NUTRI.orzechy_wloskie; // alias: mix → orzechy włoskie
@@ -982,7 +987,96 @@ document.getElementById('autoKcal').onclick = ()=>{
 
 /* ============ RENDER CAŁOŚCI (start) ============ */
 // (remove this duplicate definition and its usage)
+/* ============ RENDER: tygodnie + dni (taby) ============ */
+function renderWeeks(){
+  const tabs = document.getElementById('weekTabs');
+  const root = document.getElementById('weeksRoot');
+  tabs.innerHTML = '';
+  root.innerHTML = '';
 
+  const weekKeys = Object.keys(PLAN);
+
+  weekKeys.forEach((wk, i)=>{
+    // przycisk tygodnia
+    const b = document.createElement('button');
+    b.className = 'tab' + (i===0 ? ' active' : '');
+    b.textContent = PLAN[wk].title;
+    b.dataset.week = wk;
+    tabs.appendChild(b);
+
+    // panel tygodnia
+    const panel = document.createElement('div');
+    panel.className = 'panel' + (i===0 ? ' active' : '');
+    panel.dataset.week = wk;
+
+    // sub-taby dni
+    const subtabs = document.createElement('div');
+    subtabs.className = 'subtabs';
+    PLAN[wk].days.forEach((d, di)=>{
+      const sb = document.createElement('button');
+      sb.className = 'subtab' + (di===0 ? ' active' : '');
+      sb.textContent = d.day || ('Dzień ' + (di+1));
+      sb.dataset.dayIndex = di;
+      subtabs.appendChild(sb);
+    });
+
+    // karty dni
+    const daysWrap = document.createElement('div');
+    PLAN[wk].days.forEach((d, di)=>{
+      const html = renderDayTable(d, wk, di);
+      const holder = document.createElement('div');
+      holder.innerHTML = html;
+      const card = holder.firstElementChild;
+      if(di!==0) card.classList.remove('active');
+      else card.classList.add('active');
+      daysWrap.appendChild(card);
+    });
+
+    panel.appendChild(subtabs);
+    panel.appendChild(daysWrap);
+    root.appendChild(panel);
+  });
+
+  // logika klikania: tygodnie
+  tabs.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      const wk = tab.dataset.week;
+      tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      root.querySelectorAll('.panel').forEach(p=>{
+        p.classList.toggle('active', p.dataset.week===wk);
+      });
+    });
+  });
+
+  // logika klikania: dni w aktywnym tygodniu
+  root.querySelectorAll('.panel').forEach(panel=>{
+    const cards = panel.querySelectorAll('.card.daycard');
+    const buttons = panel.querySelectorAll('.subtab');
+    buttons.forEach((btn, idx)=>{
+      btn.addEventListener('click', ()=>{
+        buttons.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        cards.forEach((c,i)=>c.classList.toggle('active', i===idx));
+      });
+    });
+  });
+}
+
+/* ============ RENDER ALL ============ */
+function renderAll(){
+  renderWeeks();
+  renderShoppingForWeek();
+  computeSumsAndPrices();
+  applyMealFilter();
+}
+
+/* start po załadowaniu */
+document.addEventListener('DOMContentLoaded', ()=> {
+  // zainicjalizuj ceny z pamięci i pierwsze renderowanie
+  savePrices(); // upewnia się, że domyślne trafią do localStorage
+  renderAll();
+});
 /* ============ Generator tabeli dnia (HTML) ============ */
 function renderDayTable(dayObj, weekKey, dayIndex){
   if(dayObj.shopping){
