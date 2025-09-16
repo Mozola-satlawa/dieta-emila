@@ -1563,12 +1563,25 @@ function buildShoppingForWeek(weekKey){
 
   week.days.forEach(d=>{
     if(d.shopping) return;
-    Object.values(d.meals).forEach(items=>{
-      (items||[]).forEach(it=>{
+    Object.values(d.meals || {}).forEach(m=>{
+      const arr = Array.isArray(m) ? m : (m.items || []);
+      arr.forEach(it=>{
         map[it.k] = (map[it.k]||0) + it.g;
       });
     });
   });
+
+  const list = Object.entries(map).map(([k,g])=>{
+    const cost = priceFor(k,g,prices);
+    const brand = NUTRI[k]?.brand || '-';
+    const label = k.replaceAll('_',' ');
+    return {k,label,brand,g,cost};
+  }).sort((a,b)=> a.label.localeCompare(b.label,'pl'));
+
+  const total = list.reduce((s,x)=>s+x.cost,0);
+  return {list,total};
+}
+
 /* ============ ZAKUPY – storage ============ */
 const SHOP_STORE_KEY = 'emil_shop_v1';
 
@@ -1581,28 +1594,6 @@ function saveShopDB(db){
 }
 function getWeekShopState(weekKey){
   const db = loadShopDB();
-  return db[weekKey] || {};
-}
-function setWeekShopState(weekKey, state){
-  const db = loadShopDB();
-  db[weekKey] = state;
-  saveShopDB(db);
-}
-
-/* aktywny tydzień na podstawie otwartego panelu */
-function getActiveWeekKey(){
-  return document.querySelector('.panel.active')?.dataset.week || Object.keys(PLAN)[0];
-}
-
-  const list = Object.entries(map).map(([k,g])=>{
-    const cost = priceFor(k,g,prices);
-    const brand = NUTRI[k]?.brand || '-';
-    const label = k.replaceAll('_',' ');
-    return {k,label,brand,g,cost};
-  }).sort((a,b)=> a.label.localeCompare(b.label,'pl'));
-
-  const total = list.reduce((s,x)=>s+x.cost,0);
-  return {list,total};
 }
 function renderShoppingBar(){
   const wrap = document.getElementById('shoppingWeeks');
@@ -2032,6 +2023,40 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 // przycisk „⚡ Auto 2800” już masz – zostaje bez zmian
 // document.getElementById('autoKcal').onclick = ()=>{ autoDistributeAllDays(); renderAll(); };
+function renderShoppingList(weekKey){
+  const week = PLAN[weekKey];
+  if(!week) return;
+  const prices = loadPrices();
+  const totals = {}; // suma gramów dla każdego składnika
+
+  week.days.forEach(day=>{
+    if(day.shopping) return; // pomiń dzień „Zakupy_Tx”
+    for(const meal of Object.values(day.meals||{})){
+      meal.items.forEach(it=>{
+        if(!totals[it.k]) totals[it.k]=0;
+        totals[it.k]+=it.g;
+      });
+    }
+  });
+
+  let html = '<ul>';
+  let totalCost = 0;
+  for(const [k,g] of Object.entries(totals)){
+    const nd = NUTRI[k];
+    if(!nd) continue;
+    const cost = priceFor(k,g,prices);
+    totalCost+=cost;
+    html += `<li>${nd.brand||''} ${k} – ${g.toFixed(0)} g 
+      <span class="cost">${cost.toFixed(2)} zł</span></li>`;
+  }
+  html += `</ul><p><strong>Łączny koszt tygodnia: ${totalCost.toFixed(2)} zł</strong></p>`;
+  document.getElementById('shoppingListWrap').innerHTML=html;
+}
+
+// alias dla zgodności nazewnictwa
+function renderShoppingForWeek(){
+  renderShoppingBar();
+}
 
 </script>
 </body>
